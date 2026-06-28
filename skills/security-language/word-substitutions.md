@@ -18,7 +18,7 @@ This table is authoritative for all security writing produced under the `securit
 | stolen / exfiltrated (unconfirmed) | accessed, transferred, copied, observed leaving | theft is a legal conclusion | YES — escalate to counsel |
 | malicious | anomalous, unexpected, unsanctioned | intent claim, often unprovable | no |
 | hacked | inappropriately accessed (detail what was accessed) | imprecise, sensational | no |
-| vulnerability | weakness, potential weakness, finding, observed condition | infers a confirmed issue; compliance trigger | no (proper nouns CVE/CWE/CVSS kept) |
+| vulnerability | weakness, potential weakness, finding, observed condition | infers a confirmed issue; compliance trigger | no — see Proper-Noun Exemption below |
 | unauthorized access | inappropriate access — state whether authentication occurred + whether the actor was authorized; detail what was accessed | ambiguous; conflates authN/authZ | no |
 | negligent / careless / sloppy | did not align with [policy/standard], deviated from | blame + liability term | YES — escalate to counsel |
 | obviously / clearly / of course | (delete; state the evidence) | asserts conclusion without support | no |
@@ -33,6 +33,30 @@ This table is authoritative for all security writing produced under the `securit
 | violation / compliance violation / non-compliant | did not align with [control/policy]; gap relative to [control] | renders a compliance opinion we must not give | YES — flag for compliance/counsel |
 | violates [regulation] / in breach of | may have implications under [framework]; recommend review by compliance/counsel | renders a legal/regulatory opinion | YES — flag for compliance/counsel |
 | illegal / unlawful | (reframe to observed fact); flag for counsel | renders a legal conclusion | YES — flag for counsel |
+
+---
+
+## Proper-Noun Exemption — "vulnerability / vulnerabilities"
+
+The rule banning "vulnerability" (→ weakness/finding) applies to **generic usage** — describing our own findings, observed conditions, or unconfirmed issues.
+
+It does **NOT** apply to official names of standards, catalogs, scoring systems, or products that contain the word. These proper nouns must be kept **verbatim and must never be reworded**. Renaming an authoritative proper noun is a factual error.
+
+Exempted proper nouns (non-exhaustive — any similarly official title qualifies):
+
+| Official Name | Keep Exactly As |
+|---|---|
+| Common Vulnerabilities and Exposures | CVE — Common Vulnerabilities and Exposures |
+| Common Vulnerability Scoring System | CVSS — Common Vulnerability Scoring System |
+| CISA Known Exploited Vulnerabilities catalog | CISA Known Exploited Vulnerabilities (KEV) Catalog |
+| NIST National Vulnerability Database | NIST National Vulnerability Database (NVD) |
+| … and other official titles containing the word | Keep verbatim |
+
+**Wrong:** "CISA Known Exploited Weaknesses catalog" — renames an authoritative proper noun.
+**Correct:** "CISA Known Exploited Vulnerabilities (KEV) Catalog" — official name, kept verbatim.
+
+**Wrong:** "We found a vulnerability in the login flow." — generic label for our own finding → use "weakness" or "finding."
+**Correct:** "We found a weakness in the login flow." — generic finding uses the substitution.
 
 ---
 

@@ -72,3 +72,24 @@ def test_missing_file_exits_2():
     )
     assert r.returncode == 2
     assert r.stderr  # a message should appear on stderr
+
+# ---------------------------------------------------------------------------
+# Proper-noun allow-list tests — official titles must not be flagged
+# ---------------------------------------------------------------------------
+
+def test_allows_cisa_kev():
+    r = run("CISA's Known Exploited Vulnerabilities catalog lists it.")
+    assert r.returncode == 0
+
+def test_allows_nvd():
+    r = run("See the NIST National Vulnerability Database for details.")
+    assert r.returncode == 0
+
+def test_allows_cve_fullname():
+    r = run("Tracked as a Common Vulnerabilities and Exposures (CVE) entry.")
+    assert r.returncode == 0
+
+def test_bare_vulnerability_still_flagged():
+    r = run("We discovered a vulnerability.")
+    assert r.returncode == 1
+    assert "weakness" in r.stdout

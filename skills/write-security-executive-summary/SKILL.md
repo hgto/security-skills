@@ -83,7 +83,7 @@ This skill inherits all language rules from the `security-language` standard. Th
 
 - **Do not use "attacker."** Use "external party" or "threat actor." Both are equally clear to any audience and remain defensible if attribution later changes or is contested.
 - **Do not use "weakness" and "finding" interchangeably with CVE/CWE identifiers.** CVE and CWE are proper nouns and are kept as-is. The word "weakness" or "finding" is used to describe an unconfirmed or emerging condition; once a CVE is assigned, use the CVE identifier.
-- **Do not write "inappropriate access" without specifics.** State (a) whether authentication occurred, (b) whether the party held authorization for the resource, and (c) what was accessed.
+- **Do not write "unauthorized access."** State (a) whether authentication occurred and (b) whether the party held authorization for the resource. Describe the access using "inappropriate access" with specifics: (c) what was accessed, (d) how, and (e) the scope.
 - **Do not render a compliance or legal opinion.** Any regulatory angle is phrased as a flagged consideration for counsel or compliance review: "this situation may warrant review under [framework]." Never assert that a situation constitutes a violation, is non-compliant, or is illegal.
 - **Do not use vague intensifiers.** Replace "critical," "massive," "devastating," and similar terms with the specific number or scope they are intended to convey.
 - **Separate observed fact from assessment.** What was confirmed is not the same as what is inferred. Inferences must carry a likelihood qualifier and a confidence level per the `security-language` estimative-language standard.

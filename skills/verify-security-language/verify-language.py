@@ -90,6 +90,24 @@ COMPLIANCE = {
     "unlawful": "(state observed fact); flag for counsel",
 }
 
+# ---------------------------------------------------------------------------
+# Proper-noun allow-list — multi-word official titles that contain
+# "vulnerability" / "vulnerabilities" and must NEVER be flagged.
+# Each entry is a compiled case-insensitive pattern for the full phrase.
+# ---------------------------------------------------------------------------
+
+PROPER_NOUN_ALLOWLIST_PHRASES = [
+    "common vulnerabilities and exposures",
+    "common vulnerability scoring system",
+    "known exploited vulnerabilities",
+    "national vulnerability database",
+]
+
+_PROPER_NOUN_ALLOWLIST = [
+    re.compile(re.escape(phrase), re.IGNORECASE)
+    for phrase in PROPER_NOUN_ALLOWLIST_PHRASES
+]
+
 # Second-person blame pattern (not a dict, just one regex)
 SECOND_PERSON_BLAME_PATTERN = re.compile(
     r"\byou (failed|should have|neglected|forgot)\b",
@@ -141,6 +159,13 @@ def lint_lines(lines):
                 if start < ce and end > cs:  # overlap
                     return False
             return True
+
+        # Pre-claim spans occupied by allow-listed proper nouns so that any
+        # "vulnerability"/"vulnerabilities" inside them is suppressed by the
+        # existing overlap check below.
+        for allowlist_pattern in _PROPER_NOUN_ALLOWLIST:
+            for m in allowlist_pattern.finditer(raw_line):
+                claimed_spans.append((m.start(), m.end()))
 
         # Process each category in order.
         for category, compiled_entries in CATEGORIES:

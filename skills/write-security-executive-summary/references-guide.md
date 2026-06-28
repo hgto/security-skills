@@ -15,7 +15,7 @@ These sources carry regulatory weight, are subject to federal review processes, 
 | Source | What It Provides |
 |---|---|
 | NIST Special Publications (SP 800-series, SP 1800-series) | Baseline controls, risk management frameworks, configuration guidance |
-| CISA Advisories (AA-series) and Known Exploited Weaknesses (KEV) Catalog | Confirmed active exploitation, affected products, recommended mitigations |
+| CISA Advisories (AA-series) and Known Exploited Vulnerabilities (KEV) Catalog | Confirmed active exploitation, affected products, recommended mitigations |
 | NSA Cybersecurity Advisories | Nation-state TTPs, critical infrastructure guidance |
 | FBI / IC3 Advisories | Criminal threat actor TTPs, sector-specific fraud patterns |
 
@@ -83,7 +83,7 @@ A claim that a finding affects a specific product version and is under active ex
 
 > Citrix Security Advisory CTX579459 (Oct 2023) — Identifies NetScaler ADC and Gateway versions affected by CVE-2023-4966; primary source for patch versions and recommended upgrade path. https://support.citrix.com/article/CTX579459
 >
-> CISA Known Exploited Weaknesses Catalog — CVE-2023-4966 entry (added Oct 2023) — Confirms active exploitation in the wild; basis for CISA's required remediation deadline under BOD 22-01. https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+> CISA Known Exploited Vulnerabilities (KEV) Catalog — CVE-2023-4966 entry (added Oct 2023) — Confirms active exploitation in the wild; basis for CISA's required remediation deadline under BOD 22-01. https://www.cisa.gov/known-exploited-vulnerabilities-catalog
 
 ---
 

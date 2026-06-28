@@ -77,9 +77,9 @@ Score **Likelihood** and **Impact** independently, each on a 0–9 scale. Averag
 
 | Score Range | Rating |
 |---|---|
-| 0–3 | Low |
-| 3–6 | Medium |
-| 6–9 | High |
+| < 3 (lower bound 0, inclusive) | Low |
+| 3 to < 6 (lower bound inclusive, upper exclusive) | Medium |
+| 6 to 9 (both inclusive) | High |
 
 ### 2.3 Combined Risk Matrix (3×3)
 
@@ -101,7 +101,7 @@ Record a factor table for both dimensions:
 | Ease of exploit | 7 | Public exploit code exists |
 | Awareness | 6 | Well-known weakness class |
 | Intrusion detection | 3 | Queries logged; alerting not confirmed |
-| **Average** | **6.25** | **→ Medium Likelihood** |
+| **Average** | **6.25** | **→ High Likelihood** |
 
 **Impact factors:**
 
@@ -113,11 +113,11 @@ Record a factor table for both dimensions:
 | Financial damage | 7 | PII at scale; regulatory implications (flag for counsel) |
 | **Average** | **6.5** | **→ High Impact** |
 
-**Combined rating:** Medium Likelihood × High Impact → **High**
+**Combined rating:** High Likelihood × High Impact → **Critical**
 
 Add one sentence of business/environmental reconciliation:
 
-> "The table contains PII for approximately 1.2 million accounts; the Medium × High combination maps to High risk in the organizational context."
+> "The table contains PII for approximately 1.2 million accounts; the High × High combination maps to Critical risk in the organizational context."
 
 ---
 

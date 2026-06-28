@@ -24,6 +24,14 @@ This skill applies the `security-language` standard to an existing draft. Mechan
 
 2. **Triage every hit.** For each flagged term, decide whether it is (a) a clear rewrite, (b) a fact-vs-assessment separation problem, or (c) context-dependent. Do not bulk-delete — read the surrounding sentence.
 
+   **Proper-noun false positives — "vulnerability / vulnerabilities":** A linter hit on "vulnerability" or "vulnerabilities" that is part of an official proper noun is a FALSE POSITIVE — keep it verbatim. The following names (and any similarly official title) must NEVER be renamed to satisfy the linter:
+   - CVE — Common Vulnerabilities and Exposures
+   - CVSS — Common Vulnerability Scoring System
+   - CISA Known Exploited Vulnerabilities (KEV) Catalog
+   - NIST National Vulnerability Database (NVD)
+
+   Renaming a standard, catalog, advisory, or product's official name (e.g. "Known Exploited Vulnerabilities" → "Known Exploited Weaknesses") is a factual error. The linter suppresses these automatically via its allow-list, but exercise the same judgment for any official title not yet in the allow-list.
+
 3. **Reframe loaded terms** using the substitution table in `security-language/word-substitutions.md`. Common substitutions:
    - "hacker" / "attacker" → "external party" or "threat actor"
    - "breach" → "incident" or "inappropriate access" (pending counsel confirmation)
@@ -57,6 +65,8 @@ The script performs term-level pattern matching. These four failure modes requir
 - **Premature attribution.** The script does not evaluate whether the evidentiary basis for an attribution claim is sufficient. A sentence can be term-clean and still attribute identity, TTPs, or motive without adequate corroboration.
 
 - **Hindsight bias.** The script cannot detect when a report frames a past outcome as foreseeable without evidence that it was assessed as such at the time. This is a structural problem in the narrative, not a vocabulary problem.
+
+- **Proper nouns not yet in the allow-list.** The script suppresses "vulnerability/vulnerabilities" inside known official titles (CVE, CVSS, CISA KEV, NVD). Any other official name containing the word that is not yet in the allow-list will produce a false positive — keep it verbatim and do not rename it.
 
 The script is necessary, not sufficient. A clean script exit is a floor, not a ceiling.
 
