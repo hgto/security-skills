@@ -12,11 +12,14 @@ language *standard*, and one language *verifier*.
 
 - The three document skills (findings, incident reports, executive summaries)
   each guide the author through a proven structure.
-- `security-writing-language` is the shared, strict standard for neutral,
-  defensible language that the other skills require.
-- `verifying-security-language` applies that standard to an existing draft:
-  a regex linter catches mechanical violations, and skill guidance re-frames the
-  prose to be clinical.
+- `security-language` is the shared, strict standard for neutral, defensible
+  language that the other skills require.
+- `verify-security-language` applies that standard to an existing draft: a regex
+  linter catches mechanical violations, and skill guidance re-frames the prose to
+  be clinical.
+
+Every skill's `description` begins with `(hgto/security-skills)` so its origin is
+visible at a glance.
 
 General-purpose and vendor-neutral. Cites public standards (NIST, OWASP, MITRE,
 CISA, FIRST/CVSS, ODNI ICD 203). No org-specific names, scales, or templates.
@@ -28,28 +31,28 @@ CISA, FIRST/CVSS, ODNI ICD 203). No org-specific names, scales, or templates.
 README.md                               # what it is, the 5 skills, install
 docs/superpowers/specs/                 # this design + plan
 skills/
-  security-writing-language/            # CENTRAL — strict discipline skill
+  security-language/                    # CENTRAL — strict discipline skill
     SKILL.md
     word-substitutions.md               # forbidden → preferred table (heavy ref)
     estimative-language.md              # ICD 203 WEP + confidence axes (heavy ref)
-  verifying-security-language/          # verifier — script + clinical reframe
+  verify-security-language/             # verifier — script + clinical reframe
     SKILL.md
     verify-language.py                  # regex linter
-  writing-security-findings/
+  write-security-finding/
     SKILL.md
     finding-template.md
     severity-rating.md                  # CVSS v3.1/v4.0 bands, OWASP risk, justification
-  writing-incident-reports/
+  write-security-incident-report/
     SKILL.md
     incident-report-template.md         # NIST/PICERL-structured skeleton
     analysis-reference.md               # timeline format, IOC tables (defanged), ATT&CK
-  writing-executive-summaries/
+  write-security-executive-summary/
     SKILL.md
     exec-summary-template.md            # BLUF-first skeleton
     references-guide.md                 # annotated source format + authoritative tiers
 ```
 
-## Skill: `security-writing-language` (central, discipline)
+## Skill: `security-language` (central, discipline)
 
 MUST-follow standard, referenced by the other four via `**REQUIRED SUB-SKILL:**`.
 Discipline skill: includes a rationalization table and red-flags list so it
@@ -74,12 +77,12 @@ Contents:
 - **Blameless tone**: blame systems/process, not people; roles not names;
   forward-looking not punitive.
 
-## Skill: `verifying-security-language` (verifier)
+## Skill: `verify-security-language` (verifier)
 
 Verb-first process skill. Independently invocable ("make this clinical", "check
 this draft for loaded language") and used as the final step of the three
-document skills. Carries `REQUIRED SUB-SKILL: security-writing-language` and
-reuses its word table as the single source of truth.
+document skills. Carries `REQUIRED SUB-SKILL: security-language` and reuses its
+word table as the single source of truth.
 
 - **`verify-language.py`** — regex linter. Scans a draft; emits each hit with
   line, matched term, category (loaded-term / absolute / hyperbole / legal-term /
@@ -88,7 +91,7 @@ reuses its word table as the single source of truth.
   loaded terms; demote unsourced claims to assessments with confidence; strip
   absolutes/hyperbole; de-personalize blame → re-run script to confirm clean.
 
-## Skill: `writing-security-findings`
+## Skill: `write-security-finding`
 
 Spine (each field forces specificity to counter the top pitfalls):
 Title (names the vulnerability, not the symptom) → Severity (justified, with CVSS
@@ -97,9 +100,9 @@ Description (root cause/mechanism) → Impact (business + technical "so what") �
 Evidence/PoC (reproducible, redacted, non-destructive) → Remediation (actionable,
 specific, root-cause-oriented) → References (CWE, OWASP, CVE).
 `severity-rating.md` carries CVSS v3.1/v4.0 bands, OWASP Risk Rating, and how to
-justify a rating. Final step: run `verifying-security-language`.
+justify a rating. Final step: run `verify-security-language`.
 
-## Skill: `writing-incident-reports`
+## Skill: `write-security-incident-report`
 
 NIST SP 800-61 / SANS PICERL structure: metadata + TLP → executive summary →
 incident overview/classification → timeline (UTC, ISO 8601, evidence-anchored) →
@@ -108,24 +111,24 @@ potentially exposed; data *accessed* vs. *exfiltrated*) → IOCs (defanged, type
 table) → MITRE ATT&CK mapping (evidence-based) → response actions (PICERL) →
 blameless lessons learned with owner + due date. `analysis-reference.md` carries
 timeline columns, IOC table format/defanging, ATT&CK mapping format. Final step:
-run `verifying-security-language`.
+run `verify-security-language`.
 
-## Skill: `writing-executive-summaries`
+## Skill: `write-security-executive-summary`
 
 BLUF-first, descending priority, ~1 page, no FUD: BLUF (situation + impact + ask
 in ≤3 sentences) → context → key points → business/quantified risk →
 prioritized recommendations (owner, cost, timeline) → annotated references.
 `references-guide.md` carries authoritative source tiers (NIST/CISA/MITRE/vendor)
 and the annotated-reference format (issuer + identifier + date + one-line "what
-it establishes"). Final step: run `verifying-security-language`.
+it establishes"). Final step: run `verify-security-language`.
 
 ## Testing approach
 
 Per the writing-skills Iron Law (no skill without a failing test first):
-- `security-writing-language` and `verifying-security-language` are discipline
-  skills — get baseline tests: a fresh agent writes "attacker"/absolutes without
-  the skill; confirm the skill + verifier flip that. Capture rationalizations
-  into the rationalization table.
+- `security-language` and `verify-security-language` are discipline skills — get
+  baseline tests: a fresh agent writes "attacker"/absolutes without the skill;
+  confirm the skill + verifier flip that. Capture rationalizations into the
+  rationalization table.
 - The three document skills are technique/reference skills — application-scenario
   checks: give an agent raw facts, verify output follows the spine and passes the
   verifier.
@@ -140,6 +143,6 @@ Per the writing-skills Iron Law (no skill without a failing test first):
 ## Cross-reference convention
 
 Skills reference each other by name with explicit requirement markers
-(`**REQUIRED SUB-SKILL:** security-writing-language`), never `@`-links (which
-force-load and burn context). Note plugin namespacing may surface skills as
+(`**REQUIRED SUB-SKILL:** security-language`), never `@`-links (which force-load
+and burn context). Note plugin namespacing may surface skills as
 `security-skills:<skill-name>`.

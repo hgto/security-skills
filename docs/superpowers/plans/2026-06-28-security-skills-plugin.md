@@ -4,7 +4,7 @@
 
 **Goal:** Build a Claude Code plugin of five intent-triggered skills for security report writing: a central language standard, a language verifier (with script), and three document-writing skills (findings, incident reports, executive summaries).
 
-**Architecture:** Standard Claude Code plugin — `.claude-plugin/plugin.json` manifest plus a `skills/` directory, one folder per skill, each with a `SKILL.md` and supporting reference/template files. The three document skills and the verifier all cross-reference the central `security-writing-language` skill by name (`**REQUIRED SUB-SKILL:**`), never `@`-links. One Python script (`verify-language.py`) provides mechanical lint detection and is built with TDD.
+**Architecture:** Standard Claude Code plugin — `.claude-plugin/plugin.json` manifest plus a `skills/` directory, one folder per skill, each with a `SKILL.md` and supporting reference/template files. The three document skills and the verifier all cross-reference the central `security-language` skill by name (`**REQUIRED SUB-SKILL:**`), never `@`-links. One Python script (`verify-language.py`) provides mechanical lint detection and is built with TDD.
 
 **Tech Stack:** Markdown (SKILL.md + references/templates), Python 3 stdlib only (`verify-language.py`, tested with `pytest`), YAML frontmatter.
 
@@ -12,7 +12,9 @@
 
 - Plugin name: `security-skills`. Repo to be renamed `security-writing` → `security-skills`.
 - General-purpose, vendor-neutral. Cite only public standards (NIST, OWASP, MITRE, CISA, FIRST/CVSS, ODNI ICD 203). No org-specific names, scales, or distribution lists.
-- Skill `name` frontmatter: letters/numbers/hyphens only. `description`: third person, starts with "Use when…", triggers only — NEVER summarize the skill's workflow.
+- The five skill names (final): `security-language`, `verify-security-language`, `write-security-finding`, `write-security-incident-report`, `write-security-executive-summary`.
+- Every skill `description` MUST begin with `(hgto/security-skills) ` then `Use when …`.
+- Skill `name` frontmatter: letters/numbers/hyphens only. `description`: third person, triggers only — NEVER summarize the skill's workflow.
 - Cross-reference other skills by name with `**REQUIRED SUB-SKILL:**`; never use `@`-links.
 - No slash commands. No CI integration. Python: stdlib only, no third-party deps.
 - Skill discipline (writing-skills Iron Law): for the two discipline skills, run a baseline (RED) subagent test BEFORE writing the skill and capture verbatim rationalizations; verify (GREEN) after.
@@ -69,12 +71,12 @@ git commit -m "feat: scaffold security-skills plugin"
 
 ---
 
-### Task 2: `security-writing-language` skill (central discipline skill)
+### Task 2: `security-language` skill (central discipline skill)
 
 **Files:**
-- Create: `skills/security-writing-language/SKILL.md`
-- Create: `skills/security-writing-language/word-substitutions.md`
-- Create: `skills/security-writing-language/estimative-language.md`
+- Create: `skills/security-language/SKILL.md`
+- Create: `skills/security-language/word-substitutions.md`
+- Create: `skills/security-language/estimative-language.md`
 
 **Interfaces:**
 - Produces: the canonical word-substitution table (consumed by `verify-language.py` in Task 3 and the verifier skill in Task 4), and the fact-vs-assessment / likelihood-vs-confidence standard referenced by all document skills.
@@ -126,8 +128,8 @@ Two-axis reference (per ODNI ICD 203):
 Frontmatter:
 ```yaml
 ---
-name: security-writing-language
-description: Use when writing or editing any security report, finding, incident report, or executive summary, or when choosing how to describe an external party, an incident, attribution, or uncertain events in security prose.
+name: security-language
+description: (hgto/security-skills) Use when writing or editing any security report, finding, incident report, or executive summary, or when choosing how to describe an external party, an incident, attribution, or uncertain events in security prose.
 ---
 ```
 Body sections (concise; push tables to the two reference files):
@@ -147,8 +149,8 @@ Dispatch a fresh subagent given the SKILL.md + two reference files as context, s
 - [ ] **Step 6: Commit**
 
 ```bash
-git add skills/security-writing-language/
-git commit -m "feat: add security-writing-language standard skill"
+git add skills/security-language/
+git commit -m "feat: add security-language standard skill"
 ```
 
 ---
@@ -156,8 +158,8 @@ git commit -m "feat: add security-writing-language standard skill"
 ### Task 3: `verify-language.py` linter (TDD, Python stdlib)
 
 **Files:**
-- Create: `skills/verifying-security-language/verify-language.py`
-- Test: `skills/verifying-security-language/test_verify_language.py`
+- Create: `skills/verify-security-language/verify-language.py`
+- Test: `skills/verify-security-language/test_verify_language.py`
 
 **Interfaces:**
 - Produces: CLI `python3 verify-language.py <file>` (or stdin). For each hit prints `LINE:COL [category] "term" → suggestion`. Exit code 1 if any hits, 0 if clean. Categories: `loaded-term`, `absolute`, `hyperbole`, `legal-term`, `second-person-blame`. A `--json` flag emits a JSON array of `{line, col, category, term, suggestion}`.
@@ -214,7 +216,7 @@ def test_json_output():
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `cd skills/verifying-security-language && python3 -m pytest test_verify_language.py -v`
+Run: `cd skills/verify-security-language && python3 -m pytest test_verify_language.py -v`
 Expected: FAIL (script not found / no output).
 
 - [ ] **Step 3: Implement `verify-language.py`**
@@ -228,25 +230,25 @@ Implement with stdlib only:
 
 - [ ] **Step 4: Run tests to verify they pass**
 
-Run: `cd skills/verifying-security-language && python3 -m pytest test_verify_language.py -v`
+Run: `cd skills/verify-security-language && python3 -m pytest test_verify_language.py -v`
 Expected: PASS (8 passed).
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add skills/verifying-security-language/verify-language.py skills/verifying-security-language/test_verify_language.py
+git add skills/verify-security-language/verify-language.py skills/verify-security-language/test_verify_language.py
 git commit -m "feat: add verify-language.py linter with tests"
 ```
 
 ---
 
-### Task 4: `verifying-security-language` skill
+### Task 4: `verify-security-language` skill
 
 **Files:**
-- Create: `skills/verifying-security-language/SKILL.md`
+- Create: `skills/verify-security-language/SKILL.md`
 
 **Interfaces:**
-- Consumes: `verify-language.py` (Task 3); `security-writing-language` word table (Task 2).
+- Consumes: `verify-language.py` (Task 3); `security-language` word table (Task 2).
 - Produces: a re-framing procedure invoked standalone and as the final step of Tasks 5–7.
 
 - [ ] **Step 1: RED — baseline test**
@@ -258,15 +260,15 @@ Dispatch a subagent (no skill): "Rewrite this to be clinical and neutral: 'The h
 Frontmatter:
 ```yaml
 ---
-name: verifying-security-language
-description: Use when reviewing, checking, or cleaning up a security draft for loaded or non-neutral language, or when asked to make security writing clinical, neutral, or defensible before it is delivered.
+name: verify-security-language
+description: (hgto/security-skills) Use when reviewing, checking, or cleaning up a security draft for loaded or non-neutral language, or when asked to make security writing clinical, neutral, or defensible before it is delivered.
 ---
 ```
 Body:
-1. **Overview** — applies the `security-writing-language` standard to an existing draft: mechanical detection by script, clinical re-framing by judgment.
+1. **Overview** — applies the `security-language` standard to an existing draft: mechanical detection by script, clinical re-framing by judgment.
 2. **Procedure** (numbered): (a) run `python3 verify-language.py <draft>` (or pipe via stdin); (b) triage every hit; (c) reframe loaded terms using the substitution table; (d) demote any unsourced claim to an assessment with explicit likelihood + confidence; (e) strip absolutes and hyperbole; (f) de-personalize blame (systems/process, roles not names); (g) re-run the script and confirm exit 0 before delivering.
 3. **What the script cannot catch** (do by hand): fact-vs-assessment separation, missing confidence qualifiers, premature attribution, hindsight bias. The script is necessary, not sufficient.
-4. **`**REQUIRED SUB-SKILL:** security-writing-language`** for the rules behind each rewrite.
+4. **`**REQUIRED SUB-SKILL:** security-language`** for the rules behind each rewrite.
 5. **Example** — before/after using the Step 1 prompt text, showing the clinical rewrite with confidence qualifiers.
 
 - [ ] **Step 3: GREEN — verify**
@@ -276,21 +278,21 @@ Dispatch fresh subagent with SKILL.md + script as context, same Step 1 prompt. E
 - [ ] **Step 4: Commit**
 
 ```bash
-git add skills/verifying-security-language/SKILL.md
-git commit -m "feat: add verifying-security-language skill"
+git add skills/verify-security-language/SKILL.md
+git commit -m "feat: add verify-security-language skill"
 ```
 
 ---
 
-### Task 5: `writing-security-findings` skill
+### Task 5: `write-security-finding` skill
 
 **Files:**
-- Create: `skills/writing-security-findings/SKILL.md`
-- Create: `skills/writing-security-findings/finding-template.md`
-- Create: `skills/writing-security-findings/severity-rating.md`
+- Create: `skills/write-security-finding/SKILL.md`
+- Create: `skills/write-security-finding/finding-template.md`
+- Create: `skills/write-security-finding/severity-rating.md`
 
 **Interfaces:**
-- Consumes: `security-writing-language` (Task 2), `verifying-security-language` (Task 4).
+- Consumes: `security-language` (Task 2), `verify-security-language` (Task 4).
 - Produces: a finding write-up structure + template.
 
 - [ ] **Step 1: Write `severity-rating.md`**
@@ -306,11 +308,11 @@ Copy-paste skeleton with these headed fields: `Finding ID`, `Title` (name the vu
 Frontmatter:
 ```yaml
 ---
-name: writing-security-findings
-description: Use when writing up a security finding, vulnerability, pentest result, code-review issue, or audit observation, or when documenting a single discovered weakness with its severity, impact, evidence, and remediation.
+name: write-security-finding
+description: (hgto/security-skills) Use when writing up a security finding, vulnerability, pentest result, code-review issue, or audit observation, or when documenting a single discovered weakness with its severity, impact, evidence, and remediation.
 ---
 ```
-Body: overview (the Description→Impact→Evidence→Remediation spine with justified, reproducible severity); when to use; pointer to `finding-template.md` and `severity-rating.md`; a Common Mistakes table built from the researched pitfalls (no impact articulation; scanner-dump vagueness; severity not justified; non-actionable remediation; non-reproducible PoC; instance-vs-class confusion; unredacted data; symptom-as-title). `**REQUIRED SUB-SKILL:** security-writing-language`. **Final step:** "Before delivering, run `verifying-security-language` on the finding."
+Body: overview (the Description→Impact→Evidence→Remediation spine with justified, reproducible severity); when to use; pointer to `finding-template.md` and `severity-rating.md`; a Common Mistakes table built from the researched pitfalls (no impact articulation; scanner-dump vagueness; severity not justified; non-actionable remediation; non-reproducible PoC; instance-vs-class confusion; unredacted data; symptom-as-title). `**REQUIRED SUB-SKILL:** security-language`. **Final step:** "Before delivering, run `verify-security-language` on the finding."
 
 - [ ] **Step 4: Application test**
 
@@ -319,21 +321,21 @@ Dispatch a subagent with the three files as context and raw facts ("SQLi in /api
 - [ ] **Step 5: Commit**
 
 ```bash
-git add skills/writing-security-findings/
-git commit -m "feat: add writing-security-findings skill"
+git add skills/write-security-finding/
+git commit -m "feat: add write-security-finding skill"
 ```
 
 ---
 
-### Task 6: `writing-incident-reports` skill
+### Task 6: `write-security-incident-report` skill
 
 **Files:**
-- Create: `skills/writing-incident-reports/SKILL.md`
-- Create: `skills/writing-incident-reports/incident-report-template.md`
-- Create: `skills/writing-incident-reports/analysis-reference.md`
+- Create: `skills/write-security-incident-report/SKILL.md`
+- Create: `skills/write-security-incident-report/incident-report-template.md`
+- Create: `skills/write-security-incident-report/analysis-reference.md`
 
 **Interfaces:**
-- Consumes: `security-writing-language` (Task 2), `verifying-security-language` (Task 4).
+- Consumes: `security-language` (Task 2), `verify-security-language` (Task 4).
 - Produces: a NIST/PICERL-structured incident report structure + template.
 
 - [ ] **Step 1: Write `analysis-reference.md`**
@@ -352,11 +354,11 @@ Skeleton with headed sections: `Metadata` (report ID, TLP classification, author
 Frontmatter:
 ```yaml
 ---
-name: writing-incident-reports
-description: Use when writing a security incident report, post-incident report, security event report, or incident response writeup, or when documenting what happened during a security event with a timeline, scope, IOCs, and lessons learned.
+name: write-security-incident-report
+description: (hgto/security-skills) Use when writing a security incident report, post-incident report, security event report, or incident response writeup, or when documenting what happened during a security event with a timeline, scope, IOCs, and lessons learned.
 ---
 ```
-Body: overview (NIST SP 800-61 / SANS PICERL spine; fact vs. assessment is paramount); when to use; pointers to template + `analysis-reference.md`; Common Mistakes table (speculation as fact; blame/naming people; missing/non-chronological/unlabeled-timezone timeline; "accessed" vs "exfiltrated" conflation; vague scope without stating visibility limits; recommendations with no owner/deadline; live un-defanged IOCs; ATT&CK unsupported by evidence; overstating certainty before forensics complete). `**REQUIRED SUB-SKILL:** security-writing-language` (call out likelihood-vs-confidence + defanging). **Final step:** run `verifying-security-language`.
+Body: overview (NIST SP 800-61 / SANS PICERL spine; fact vs. assessment is paramount); when to use; pointers to template + `analysis-reference.md`; Common Mistakes table (speculation as fact; blame/naming people; missing/non-chronological/unlabeled-timezone timeline; "accessed" vs "exfiltrated" conflation; vague scope without stating visibility limits; recommendations with no owner/deadline; live un-defanged IOCs; ATT&CK unsupported by evidence; overstating certainty before forensics complete). `**REQUIRED SUB-SKILL:** security-language` (call out likelihood-vs-confidence + defanging). **Final step:** run `verify-security-language`.
 
 - [ ] **Step 4: Application test**
 
@@ -365,21 +367,21 @@ Subagent with the three files + raw facts (phishing → macro → PowerShell →
 - [ ] **Step 5: Commit**
 
 ```bash
-git add skills/writing-incident-reports/
-git commit -m "feat: add writing-incident-reports skill"
+git add skills/write-security-incident-report/
+git commit -m "feat: add write-security-incident-report skill"
 ```
 
 ---
 
-### Task 7: `writing-executive-summaries` skill
+### Task 7: `write-security-executive-summary` skill
 
 **Files:**
-- Create: `skills/writing-executive-summaries/SKILL.md`
-- Create: `skills/writing-executive-summaries/exec-summary-template.md`
-- Create: `skills/writing-executive-summaries/references-guide.md`
+- Create: `skills/write-security-executive-summary/SKILL.md`
+- Create: `skills/write-security-executive-summary/exec-summary-template.md`
+- Create: `skills/write-security-executive-summary/references-guide.md`
 
 **Interfaces:**
-- Consumes: `security-writing-language` (Task 2), `verifying-security-language` (Task 4).
+- Consumes: `security-language` (Task 2), `verify-security-language` (Task 4).
 - Produces: a BLUF-first executive summary structure + template + references guide.
 
 - [ ] **Step 1: Write `references-guide.md`**
@@ -395,11 +397,11 @@ Skeleton, descending priority, ~1 page: `BLUF` (≤3 sentences: situation + impa
 Frontmatter:
 ```yaml
 ---
-name: writing-executive-summaries
-description: Use when writing an executive summary or leadership briefing on a security topic, vulnerability, threat, or incident for a non-technical or senior audience, or when asked for a BLUF, board summary, or bottom-line-up-front writeup.
+name: write-security-executive-summary
+description: (hgto/security-skills) Use when writing an executive summary or leadership briefing on a security topic, vulnerability, threat, or incident for a non-technical or senior audience, or when asked for a BLUF, board summary, or bottom-line-up-front writeup.
 ---
 ```
-Body: overview (BLUF = lead with conclusion + impact + ask; ~1 page; descending priority; business not technical language; calm, no FUD); when to use; pointers to template + `references-guide.md`; Common Mistakes table (too technical/jargon; burying the lede; no clear ask; fear-mongering/FUD; unsourced claims; unquantified risk; length bloat). `**REQUIRED SUB-SKILL:** security-writing-language`. **Final step:** run `verifying-security-language`.
+Body: overview (BLUF = lead with conclusion + impact + ask; ~1 page; descending priority; business not technical language; calm, no FUD); when to use; pointers to template + `references-guide.md`; Common Mistakes table (too technical/jargon; burying the lede; no clear ask; fear-mongering/FUD; unsourced claims; unquantified risk; length bloat). `**REQUIRED SUB-SKILL:** security-language`. **Final step:** run `verify-security-language`.
 
 - [ ] **Step 4: Application test**
 
@@ -408,8 +410,8 @@ Subagent with the three files + a topic (e.g. critical VPN CVE under active expl
 - [ ] **Step 5: Commit**
 
 ```bash
-git add skills/writing-executive-summaries/
-git commit -m "feat: add writing-executive-summaries skill"
+git add skills/write-security-executive-summary/
+git commit -m "feat: add write-security-executive-summary skill"
 ```
 
 ---
@@ -424,11 +426,11 @@ git commit -m "feat: add writing-executive-summaries skill"
 
 - [ ] **Step 1: Finalize README**
 
-Replace the placeholder skills list with the five finalized one-liners (matched to each skill's purpose), a short "How they work together" note (three doc skills require the language standard and end by running the verifier), and an example invocation per skill. Remove the `<!-- finalized in Task 8 -->` marker.
+Replace the placeholder skills list with the five finalized one-liners (matched to each skill's purpose), a short "How they work together" note (three doc skills require `security-language` and end by running `verify-security-language`), and an example invocation per skill. Remove the `<!-- finalized in Task 8 -->` marker.
 
 - [ ] **Step 2: Validate all skill frontmatter**
 
-Run a check that every `SKILL.md` has `name` (hyphen/letter/number only) and a `description` starting with "Use when", and frontmatter ≤1024 chars:
+Run a check that every `SKILL.md` has `name` (hyphen/letter/number only) and a `description` starting with `(hgto/security-skills) Use when`, and frontmatter ≤1024 chars:
 ```bash
 for f in skills/*/SKILL.md; do
   echo "== $f"; head -5 "$f"
@@ -438,7 +440,7 @@ Expected: five files, each with valid frontmatter. Confirm no `@`-links: `! grep
 
 - [ ] **Step 3: Full linter regression**
 
-Run: `cd skills/verifying-security-language && python3 -m pytest -v`
+Run: `cd skills/verify-security-language && python3 -m pytest -v`
 Expected: all pass.
 
 - [ ] **Step 4: Commit**
@@ -462,6 +464,7 @@ Then push the branch and open a PR (push requires explicit user approval per hou
 ## Self-Review
 
 - **Spec coverage:** plugin scaffold (T1); central language standard with word table + estimative language (T2); verifier script (T3) + skill (T4); findings (T5); incident reports (T6); executive summaries (T7); README + validation + rename (T8). All five skills + the verifier script + rename covered.
-- **Cross-references:** Tasks 4–7 each include `**REQUIRED SUB-SKILL:** security-writing-language`; Tasks 5–7 each end by running `verifying-security-language`. Consistent.
+- **Cross-references:** Tasks 4–7 each include `**REQUIRED SUB-SKILL:** security-language`; Tasks 5–7 each end by running `verify-security-language`. Consistent.
 - **Type consistency:** `verify-language.py` interface (categories, `--json` shape, exit codes) defined in Task 3 and consumed unchanged in Task 4.
+- **Naming:** all five final names used consistently in directory paths, frontmatter, and cross-references; every description begins with `(hgto/security-skills) `.
 - **Testing:** discipline skills (T2, T4) have RED baseline + GREEN verify; document skills (T5–T7) have application tests; script (T3) has pytest TDD.
