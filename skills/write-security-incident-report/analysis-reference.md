@@ -65,7 +65,7 @@ All network IOCs in a written report must be defanged to prevent accidental acti
 Rules:
 - Replace `http://` with `hxxp://` and `https://` with `hxxps://`.
 - Bracket the dots in domain names: `example[.]com`.
-- Bracket the third-to-fourth-octet dot in IP addresses: `192.168[.]1[.]1`.
+- Bracket the final two octet-separator dots in IP addresses (e.g. `192.168[.]1[.]1`); bracketing all dots is also acceptable.
 - Apply defanging even when the IOC appears inside a code block or table cell in a human-readable document.
 
 **Exception:** Defanging is not required in machine-readable appendices (STIX bundles, YARA rules, Sigma rules) because those formats are consumed by parsers, not rendered by human-facing clients. Note this exception explicitly in the appendix heading.
@@ -78,7 +78,7 @@ Group IOCs by type. Preferred type order: hashes (SHA-256 preferred over MD5/SHA
 |---|---|---|---|---|---|---|
 | SHA-256 | `a3f1b2c4d5e6...` (64 hex chars) | Dropper binary — `invoice.doc` delivered via phishing | High | 2026-06-28T14:30:00Z | 2026-06-28T14:30:00Z | EDR quarantine log |
 | IP address | `198.51.100[.]42` | Command-and-control beacon destination | Moderate | 2026-06-28T14:35:12Z | 2026-06-28T16:22:09Z | Firewall netflow |
-| Domain | `hxxps://updates[.]malicious-cdn[.]com` | C2 callback domain resolved during infection | Moderate | 2026-06-28T14:35:00Z | 2026-06-28T16:00:00Z | DNS query log |
+| Domain | `updates[.]malicious-cdn[.]com` | C2 callback domain resolved during infection | Moderate | 2026-06-28T14:35:00Z | 2026-06-28T16:00:00Z | DNS query log |
 | File path | `C:\Users\Public\svchost32.exe` | Dropped payload — masquerades as system process | High | 2026-06-28T14:33:44Z | 2026-06-28T15:58:01Z | EDR telemetry |
 | Registry key | `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\WindowsUpdate` | Persistence mechanism — points to dropped binary | High | 2026-06-28T14:34:02Z | 2026-06-28T15:58:05Z | Registry change log |
 
