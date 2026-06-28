@@ -1,0 +1,6 @@
+{
+  "name": "security-skills",
+  "version": "0.1.0",
+  "description": "Skills for writing security findings, incident reports, and executive summaries in neutral, defensible language.",
+  "author": { "name": "hgto" }
+}
