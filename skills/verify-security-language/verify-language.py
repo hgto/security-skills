@@ -142,6 +142,39 @@ CATEGORIES = [
 ]
 
 # ---------------------------------------------------------------------------
+# Global multi-word-first pass — derived from the same source dicts so there
+# is no duplication of term definitions.  All entries whose key contains a
+# space are collected here, paired with their category, and sorted longest
+# first.  The linter runs this pass BEFORE the per-category single-word pass
+# so that e.g. "in breach of" (legal-compliance-opinion) always wins over
+# bare "breach" (legal-term) regardless of CATEGORIES order.
+# ---------------------------------------------------------------------------
+
+_CATEGORY_SOURCE_DICTS = [
+    ("loaded-term",              LOADED),
+    ("legal-term",               LEGAL),
+    ("hyperbole",                HYPERBOLE),
+    ("absolute",                 ABSOLUTES),
+    ("legal-compliance-opinion", COMPLIANCE),
+]
+
+ALL_MULTIWORD_ENTRIES = sorted(
+    [
+        (
+            re.compile(r"\b" + re.escape(term) + r"\b", re.IGNORECASE),
+            term,
+            suggestion,
+            category,
+        )
+        for category, source_dict in _CATEGORY_SOURCE_DICTS
+        for term, suggestion in source_dict.items()
+        if " " in term
+    ],
+    key=lambda entry: len(entry[1]),
+    reverse=True,
+)
+
+# ---------------------------------------------------------------------------
 # Core linting logic
 # ---------------------------------------------------------------------------
 
@@ -173,9 +206,29 @@ def lint_lines(lines):
             for m in allowlist_pattern.finditer(raw_line):
                 claimed_spans.append((m.start(), m.end()))
 
-        # Process each category in order.
+        # --- Pass 1: all multi-word terms across every category, longest first.
+        # This ensures e.g. "in breach of" (legal-compliance-opinion) always
+        # wins over bare "breach" (legal-term) regardless of CATEGORIES order.
+        for pattern, term, suggestion, category in ALL_MULTIWORD_ENTRIES:
+            for m in pattern.finditer(raw_line):
+                start, end = m.start(), m.end()
+                if not span_is_free(start, end):
+                    continue
+                claimed_spans.append((start, end))
+                hits.append({
+                    "line": lineno,
+                    "col": start + 1,   # 1-based
+                    "category": category,
+                    "term": m.group(0),
+                    "suggestion": suggestion,
+                })
+
+        # --- Pass 2: single-word terms per category (claimed_spans prevents
+        # double-reporting any span already claimed by the multi-word pass).
         for category, compiled_entries in CATEGORIES:
             for pattern, term, suggestion in compiled_entries:
+                if " " in term:
+                    continue  # already handled in pass 1
                 for m in pattern.finditer(raw_line):
                     start, end = m.start(), m.end()
                     if not span_is_free(start, end):

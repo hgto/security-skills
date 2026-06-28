@@ -110,3 +110,21 @@ def test_url_does_not_suppress_surrounding_prose():
 def test_plain_url_clean():
     r = run("Patch per https://vendor.example.com/advisory/123")
     assert r.returncode == 0
+
+# ---------------------------------------------------------------------------
+# Cross-category multi-word precedence tests
+# ---------------------------------------------------------------------------
+
+def test_flags_in_breach_of():
+    # "in breach of" (legal-compliance-opinion) must win over bare "breach"
+    # (legal-term) even though legal-term appears earlier in CATEGORIES.
+    r = run("They were in breach of HIPAA.")
+    assert r.returncode == 1
+    assert "legal-compliance-opinion" in r.stdout
+
+def test_compliance_violation_still_specific():
+    # Multi-word "compliance violation" must still win over bare "violation"
+    # when the full phrase is present.
+    r = run("This is a compliance violation.")
+    assert "legal-compliance-opinion" in r.stdout
+    assert "compliance violation" in r.stdout

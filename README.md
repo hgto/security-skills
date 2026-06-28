@@ -41,6 +41,10 @@ Build a NIST/PICERL incident report from investigation notes, log exports, or a 
 ```
 Translate a technical report or incident into a BLUF-first, one-page leadership briefing.
 
+### Note on linter scope
+
+The linter (`verify-language.py`) is intended for the content of security reports and findings — not for skill metadata or documentation. Skill `description` fields and this README intentionally use trigger keywords like "vulnerability" so users can discover the skills, and are not themselves linted.
+
 ## Install
 
 Install via the `/plugin` marketplace command in Claude Code, or clone this repository into your Claude Code plugins directory.
