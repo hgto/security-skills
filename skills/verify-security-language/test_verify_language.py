@@ -93,3 +93,20 @@ def test_bare_vulnerability_still_flagged():
     r = run("We discovered a vulnerability.")
     assert r.returncode == 1
     assert "weakness" in r.stdout
+
+# ---------------------------------------------------------------------------
+# URL suppression tests — banned slugs inside URLs must not be flagged
+# ---------------------------------------------------------------------------
+
+def test_allows_url_with_banned_slug():
+    r = run("See https://www.cisa.gov/known-exploited-vulnerabilities-catalog for details.")
+    assert r.returncode == 0
+
+def test_url_does_not_suppress_surrounding_prose():
+    r = run("This vulnerability is listed at https://example.com/known-exploited-vulnerabilities-catalog")
+    assert r.returncode == 1
+    assert "weakness" in r.stdout
+
+def test_plain_url_clean():
+    r = run("Patch per https://vendor.example.com/advisory/123")
+    assert r.returncode == 0

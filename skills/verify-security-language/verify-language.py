@@ -160,6 +160,12 @@ def lint_lines(lines):
                     return False
             return True
 
+        # Pre-claim spans occupied by URL tokens so that any banned term
+        # inside a URL (e.g. a slug like /known-exploited-vulnerabilities-catalog)
+        # is suppressed by the existing overlap check below.
+        for m in re.finditer(r"https?://\S+", raw_line, re.IGNORECASE):
+            claimed_spans.append((m.start(), m.end()))
+
         # Pre-claim spans occupied by allow-listed proper nouns so that any
         # "vulnerability"/"vulnerabilities" inside them is suppressed by the
         # existing overlap check below.
