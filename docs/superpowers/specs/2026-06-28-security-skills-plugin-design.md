@@ -21,6 +21,14 @@ language *standard*, and one language *verifier*.
 Every skill's `description` begins with `(hgto/security-skills)` so its origin is
 visible at a glance.
 
+**No legal or compliance opinions.** Across every skill, these tools never give
+legal or compliance advice and never advance a legal or compliance opinion. They
+state observed facts neutrally and *flag* any matter with potential legal or
+regulatory implications for review by counsel/compliance. They never assert a
+"violation", a "compliance violation", or that a compliance/regulatory obligation
+is being broken — that determination belongs to counsel/compliance, not the
+report.
+
 General-purpose and vendor-neutral. Cites public standards (NIST, OWASP, MITRE,
 CISA, FIRST/CVSS, ODNI ICD 203). No org-specific names, scales, or templates.
 
@@ -59,12 +67,22 @@ Discipline skill: includes a rationalization table and red-flags list so it
 resists pressure.
 
 Contents:
-- **Word-substitution table** (~18 pairs): `attacker`→`external party`/`threat
+- **Word-substitution table** (~20 pairs): `attacker`→`external party`/`threat
   actor`; plus `hacker`, `victim`, `breach`, `compromised`, `stolen`/`exfiltrated`
   (unconfirmed), `malicious`, `negligent`/`careless`, `obviously`/`clearly`,
   hyperbole (`catastrophic`, `devastating`), `backdoor`, `guilty`/`culprit`, etc.
   Legal terms of art (`breach`, `negligent`, `stolen`) flagged as
   "escalate to counsel / use neutral synonym."
+- **No "vulnerability"**: the word infers a confirmed issue and is a compliance
+  trigger. Use `weakness` / `potential weakness` / `finding` / `observed
+  condition`. (Standard proper nouns — CVE, CWE, CVSS — are kept as names, and
+  direct quotes from external advisories are left verbatim; the verifier's triage
+  step handles those.)
+- **No "unauthorized access"** (ambiguous): instead state whether authentication
+  occurred and whether the actor was authorized, and describe the access as
+  `inappropriate access` with specifics of what was accessed. Replacements
+  elsewhere in the table that previously read "unauthorized access" /
+  "unauthorized user" / "without authorization" are revised to this framing.
 - **Absolutes blocklist**: "unhackable", "100% secure", "fully eliminated",
   "guaranteed", "impossible".
 - **Fact vs. assessment**: observed (sourced, past tense, declarative) vs.
@@ -74,6 +92,12 @@ Contents:
   Never collapse them.
 - **Attribution caution**: default "unattributed"; describe TTPs not identity;
   confidence-qualify any attribution.
+- **No legal/compliance opinions**: never write "violation", "compliance
+  violation", "non-compliant", "violates [regulation]", "illegal/unlawful", or
+  state that an obligation is breached. Instead, state the observed fact and flag
+  for counsel/compliance review (e.g., "did not align with [control X]; may have
+  implications under [framework] — recommend review by compliance"). Builds on the
+  legal-terms-of-art handling above.
 - **Blameless tone**: blame systems/process, not people; roles not names;
   forward-looking not punitive.
 
@@ -86,7 +110,10 @@ word table as the single source of truth.
 
 - **`verify-language.py`** — regex linter. Scans a draft; emits each hit with
   line, matched term, category (loaded-term / absolute / hyperbole / legal-term /
-  second-person-blame), and the preferred replacement. Mechanical detection only.
+  second-person-blame / legal-compliance-opinion), and the preferred replacement.
+  The `legal-compliance-opinion` category flags "violation", "compliance
+  violation", "non-compliant", "violates", "illegal", "unlawful", "in breach of".
+  Mechanical detection only.
 - **Re-framing procedure** (skill judgment): run script → triage hits → reframe
   loaded terms; demote unsourced claims to assessments with confidence; strip
   absolutes/hyperbole; de-personalize blame → re-run script to confirm clean.

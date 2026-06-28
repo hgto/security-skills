@@ -12,6 +12,7 @@
 
 - Plugin name: `security-skills`. Repo to be renamed `security-writing` → `security-skills`.
 - General-purpose, vendor-neutral. Cite only public standards (NIST, OWASP, MITRE, CISA, FIRST/CVSS, ODNI ICD 203). No org-specific names, scales, or distribution lists.
+- **No legal/compliance opinions (all skills):** never give legal or compliance advice, never advance a legal/compliance opinion, and never write "violation", "compliance violation", "non-compliant", "violates", "illegal", "unlawful", or "in breach of [obligation]". State the observed fact neutrally and flag for counsel/compliance review instead. Enforced by `security-language` guidance + the `legal-compliance-opinion` linter category.
 - The five skill names (final): `security-language`, `verify-security-language`, `write-security-finding`, `write-security-incident-report`, `write-security-executive-summary`.
 - Every skill `description` MUST begin with `(hgto/security-skills) ` then `Use when …`.
 - Skill `name` frontmatter: letters/numbers/hyphens only. `description`: third person, triggers only — NEVER summarize the skill's workflow.
@@ -94,14 +95,16 @@ A heavy-reference table. Columns: `Avoid | Use instead | Why | Legal term of art
 
 | Avoid | Use instead | Why | Legal term? |
 |---|---|---|---|
-| attacker | external party, threat actor, unauthorized user | presumes hostile intent + attribution | no |
-| hacker | threat actor, unauthorized party | pejorative, imprecise | no |
+| attacker | external party, threat actor, the actor | presumes hostile intent + attribution | no |
+| hacker | threat actor, external party | pejorative, imprecise | no |
 | victim | affected party, impacted organization | frames legal posture; emotive | no |
-| breach | incident, event, unauthorized access | regulatory term of art; triggers duties | YES — escalate to counsel |
+| breach | incident, event, inappropriate access (state auth/authz + what was accessed) | regulatory term of art; triggers duties | YES — escalate to counsel |
 | compromised (unconfirmed) | potentially affected, exposed to, accessed by | implies confirmed control | no |
 | stolen / exfiltrated (unconfirmed) | accessed, transferred, copied, observed leaving | theft is a legal conclusion | YES — escalate to counsel |
-| malicious | unauthorized, anomalous, unexpected | intent claim, often unprovable | no |
-| hacked | accessed without authorization | imprecise, sensational | no |
+| malicious | anomalous, unexpected, unsanctioned | intent claim, often unprovable | no |
+| hacked | inappropriately accessed (detail what was accessed) | imprecise, sensational | no |
+| vulnerability | weakness, potential weakness, finding, observed condition | infers a confirmed issue; compliance trigger | no (proper nouns CVE/CWE/CVSS kept) |
+| unauthorized access | inappropriate access — state whether authentication occurred + whether the actor was authorized; detail what was accessed | ambiguous; conflates authN/authZ | no |
 | negligent / careless / sloppy | did not align with [policy/standard], deviated from | blame + liability term | YES — escalate to counsel |
 | obviously / clearly / of course | (delete; state the evidence) | asserts conclusion without support | no |
 | catastrophic / devastating / massive | significant, material, [quantified] | hyperbole | no |
@@ -109,9 +112,14 @@ A heavy-reference table. Columns: `Avoid | Use instead | Why | Legal term of art
 | backdoor | undocumented access mechanism | loaded; presumes intent | no |
 | weaponized | configured to exploit, used to deliver | militarized framing | no |
 | guilty / culprit / perpetrator | responsible party, actor, source | criminal-law conclusion | no |
-| spy / espionage (unconfirmed) | unauthorized collection of information | geopolitical conclusion | no |
+| spy / espionage (unconfirmed) | collection of information beyond approved scope | geopolitical conclusion | no |
 | war / campaign (casual) | sustained activity, related set of events | reserve for evidenced usage | no |
 | should have / failed to (personal) | (reframe to system/process) | personal blame; discoverable | no |
+| violation / compliance violation / non-compliant | did not align with [control/policy]; gap relative to [control] | renders a compliance opinion we must not give | YES — flag for compliance/counsel |
+| violates [regulation] / in breach of | may have implications under [framework]; recommend review by compliance/counsel | renders a legal/regulatory opinion | YES — flag for compliance/counsel |
+| illegal / unlawful | (reframe to observed fact); flag for counsel | renders a legal conclusion | YES — flag for counsel |
+
+Add a **No legal/compliance opinions** subsection: never assert a "violation" or that a compliance/regulatory/legal obligation is breached. State the observed fact and flag the matter for counsel/compliance to assess. This extends the legal-terms-of-art rows above (`breach`, `negligent`, `stolen`).
 
 Add an **Absolutes blocklist** subsection: `unhackable`, `100% secure`, `fully secure`, `fully eliminated`, `completely eliminated`, `guaranteed`, `impossible`, `cannot be breached`. Note: replace with "reduces the likelihood of", "mitigates", "no evidence of X was found".
 
@@ -135,12 +143,13 @@ description: (hgto/security-skills) Use when writing or editing any security rep
 Body sections (concise; push tables to the two reference files):
 1. **Overview** — core principle: every assertion is traceable to evidence; separate observed fact from assessment; neutral, defensible, non-blaming language.
 2. **The load-bearing rule** — Fact (observed, sourced, past tense, declarative) vs. Assessment (hedged, confidence-qualified). One example pair.
-3. **Word choice** — "Use neutral terms; see `word-substitutions.md` for the full table." State the headline rule: "external party"/"threat actor", never "attacker"; never assert "breach"/"stolen" (legal terms) until confirmed.
+3. **Word choice** — "Use neutral terms; see `word-substitutions.md` for the full table." State the headline rules: "external party"/"threat actor", never "attacker"; never assert "breach"/"stolen" (legal terms) until confirmed; never "vulnerability" (→ "weakness"/"potential weakness"/"finding"; it infers a confirmed issue and is a compliance trigger — but keep proper nouns CVE/CWE/CVSS); never "unauthorized access" (ambiguous → state whether authentication occurred and whether the actor was authorized, and describe "inappropriate access" with specifics of what was accessed).
 4. **Likelihood vs. confidence** — two separate axes; pointer to `estimative-language.md`.
 5. **Attribution caution** — default "unattributed"; describe TTPs not identity.
-6. **Blameless tone** — systems/process not people; roles not names; forward-looking.
-7. **Red Flags — STOP** list: "I wrote 'attacker'", "I stated exfiltration without saying 'assessed'", "I used an absolute", "I named/blamed a person", "I called it a 'breach' before confirmation".
-8. **Rationalization table** — seeded from Step 1 baseline (e.g. "'Attacker' is just clearer" → "Clarity doesn't require an intent+attribution claim; 'external party' is equally clear and defensible"). Add rows for every rationalization the baseline subagent produced.
+6. **No legal/compliance opinions** — never give legal/compliance advice or advance a legal/compliance opinion; never write "violation"/"compliance violation"/"non-compliant"/"violates [regulation]"/"illegal". State the observed fact and flag the matter for counsel/compliance review. Example pair: ✗ "This is a GDPR violation." → ✓ "Personal data was accessible without authentication; this may have implications under GDPR — recommend review by compliance/counsel."
+7. **Blameless tone** — systems/process not people; roles not names; forward-looking.
+8. **Red Flags — STOP** list: "I wrote 'attacker'", "I wrote 'vulnerability'", "I wrote 'unauthorized access' instead of stating authN/authZ", "I stated exfiltration without saying 'assessed'", "I used an absolute", "I named/blamed a person", "I called it a 'breach' before confirmation", "I called something a 'violation' / said it 'violates' a regulation / gave a compliance verdict".
+9. **Rationalization table** — seeded from Step 1 baseline (e.g. "'Attacker' is just clearer" → "Clarity doesn't require an intent+attribution claim; 'external party' is equally clear and defensible"). Add rows for every rationalization the baseline subagent produced.
 
 - [ ] **Step 5: GREEN — verify with skill**
 
@@ -162,7 +171,7 @@ git commit -m "feat: add security-language standard skill"
 - Test: `skills/verify-security-language/test_verify_language.py`
 
 **Interfaces:**
-- Produces: CLI `python3 verify-language.py <file>` (or stdin). For each hit prints `LINE:COL [category] "term" → suggestion`. Exit code 1 if any hits, 0 if clean. Categories: `loaded-term`, `absolute`, `hyperbole`, `legal-term`, `second-person-blame`. A `--json` flag emits a JSON array of `{line, col, category, term, suggestion}`.
+- Produces: CLI `python3 verify-language.py <file>` (or stdin). For each hit prints `LINE:COL [category] "term" → suggestion`. Exit code 1 if any hits, 0 if clean. Categories: `loaded-term`, `absolute`, `hyperbole`, `legal-term`, `second-person-blame`, `legal-compliance-opinion`. A `--json` flag emits a JSON array of `{line, col, category, term, suggestion}`.
 - Consumes: the term list mirrors `word-substitutions.md` from Task 2 (keep the mapping in a module-level dict).
 
 - [ ] **Step 1: Write failing tests**
@@ -196,6 +205,27 @@ def test_flags_second_person_blame():
     r = run("You failed to apply the patch.")
     assert "second-person-blame" in r.stdout
 
+def test_flags_compliance_opinion():
+    r = run("This is a compliance violation of GDPR.")
+    assert r.returncode == 1
+    assert "legal-compliance-opinion" in r.stdout
+
+def test_flags_violation_word():
+    assert "legal-compliance-opinion" in run("This is a clear violation.").stdout
+
+def test_flags_violates():
+    assert "legal-compliance-opinion" in run("The system violates HIPAA.").stdout
+
+def test_flags_vulnerability():
+    r = run("We found a critical vulnerability in the login flow.")
+    assert r.returncode == 1
+    assert "weakness" in r.stdout
+
+def test_flags_unauthorized_access():
+    r = run("This allowed unauthorized access to records.")
+    assert r.returncode == 1
+    assert "inappropriate access" in r.stdout
+
 def test_clean_text_exit_zero():
     r = run("An external party accessed the host; data was observed transferring out.")
     assert r.returncode == 0
@@ -222,8 +252,9 @@ Expected: FAIL (script not found / no output).
 - [ ] **Step 3: Implement `verify-language.py`**
 
 Implement with stdlib only:
-- Module-level dicts: `LOADED = {"attacker": "external party / threat actor", "hacker": "threat actor", "victim": "affected party", "malicious": "unauthorized / anomalous", "hacked": "accessed without authorization", "backdoor": "undocumented access mechanism", ...}`, `LEGAL = {"breach": "incident / unauthorized access", "stolen": "accessed / transferred", "exfiltrated": "observed transferring", "negligent": "did not align with policy", "compromised": "potentially affected"}`, `HYPERBOLE = {"catastrophic","devastating","massive","disaster","obviously","clearly"}`, `ABSOLUTES = {"unhackable","100% secure","fully secure","guaranteed","impossible","fully eliminated"}`, and a regex for second-person blame: `\byou (failed|should have|neglected|forgot)\b`.
-- Match each term with `re.finditer(r"\b" + re.escape(term) + r"\b", line, re.IGNORECASE)` for word-boundary safety (covers `test_word_boundary_no_false_positive`). For multi-word absolutes, match the phrase directly.
+- Module-level dicts: `LOADED = {"attacker": "external party / threat actor", "hacker": "threat actor / external party", "victim": "affected party", "malicious": "anomalous / unsanctioned", "hacked": "inappropriately accessed (detail what was accessed)", "backdoor": "undocumented access mechanism", "vulnerability": "weakness / potential weakness / finding", "vulnerabilities": "weaknesses / potential weaknesses", "unauthorized access": "inappropriate access — state authN/authZ + what was accessed", ...}`, `LEGAL = {"breach": "incident / inappropriate access", "stolen": "accessed / transferred", "exfiltrated": "observed transferring", "negligent": "did not align with policy", "compromised": "potentially affected"}`, `HYPERBOLE = {"catastrophic","devastating","massive","disaster","obviously","clearly"}`, `ABSOLUTES = {"unhackable","100% secure","fully secure","guaranteed","impossible","fully eliminated"}`, `COMPLIANCE = {"compliance violation": "gap relative to [control]; flag for compliance", "violation": "did not align with [control/policy]", "non-compliant": "did not align with [control]", "violates": "may have implications under [framework]; recommend review by compliance", "in breach of": "may have implications under [framework]; recommend review by counsel", "illegal": "(state observed fact); flag for counsel", "unlawful": "(state observed fact); flag for counsel"}` (category `legal-compliance-opinion`), and a regex for second-person blame: `\byou (failed|should have|neglected|forgot)\b`.
+- Match multi-word COMPLIANCE phrases (e.g. "compliance violation", "in breach of") before single words so the more specific phrase wins; the bare word "violation" is flagged per house rule even though it over-flags benign technical uses (the verifier's triage step handles those).
+- Match each term with `re.finditer(r"\b" + re.escape(term) + r"\b", line, re.IGNORECASE)` for word-boundary safety (covers `test_word_boundary_no_false_positive`). Multi-word entries (e.g. "unauthorized access", "compliance violation", multi-word absolutes) match the phrase directly; match longer phrases before their constituent single words so the more specific suggestion wins and the same span isn't double-reported.
 - For each hit collect `{line, col, category, term, suggestion}`.
 - Read from file arg if given, else stdin. `--json` → `print(json.dumps(hits))`; else human lines `f'{line}:{col} [{category}] "{term}" → {suggestion}'`.
 - `sys.exit(1 if hits else 0)`.
@@ -231,7 +262,7 @@ Implement with stdlib only:
 - [ ] **Step 4: Run tests to verify they pass**
 
 Run: `cd skills/verify-security-language && python3 -m pytest test_verify_language.py -v`
-Expected: PASS (8 passed).
+Expected: PASS (13 passed).
 
 - [ ] **Step 5: Commit**
 
@@ -301,7 +332,7 @@ Reference: CVSS bands (None 0.0 / Low 0.1–3.9 / Medium 4.0–6.9 / High 7.0–
 
 - [ ] **Step 2: Write `finding-template.md`**
 
-Copy-paste skeleton with these headed fields: `Finding ID`, `Title` (name the vulnerability, not the symptom), `Severity` (label + CVSS vector or OWASP factors), `Affected Assets` (precise: host/URL/param/version), `Description` (root cause/mechanism), `Impact` (business + technical "so what"), `Likelihood/Exploitability`, `Evidence / PoC` (reproducible, redacted, non-destructive — numbered repro steps), `Remediation` (actionable, specific, root-cause-oriented; short-term vs durable), `References` (CWE, OWASP, CVE), `Status`.
+Copy-paste skeleton with these headed fields: `Finding ID`, `Title` (name the weakness/finding, not the symptom; do not label it a "vulnerability"), `Severity` (label + CVSS vector or OWASP factors), `Affected Assets` (precise: host/URL/param/version), `Description` (root cause/mechanism), `Impact` (business + technical "so what"), `Likelihood/Exploitability`, `Evidence / PoC` (reproducible, redacted, non-destructive — numbered repro steps), `Remediation` (actionable, specific, root-cause-oriented; short-term vs durable), `References` (CWE, OWASP, CVE), `Status`.
 
 - [ ] **Step 3: Write `SKILL.md`**
 
@@ -316,7 +347,7 @@ Body: overview (the Description→Impact→Evidence→Remediation spine with jus
 
 - [ ] **Step 4: Application test**
 
-Dispatch a subagent with the three files as context and raw facts ("SQLi in /api/login username param, confirmed via Burp, dumps users table"). Verify output: correct spine, names the vuln, justified severity with vector, reproducible redacted PoC, actionable remediation, CWE-89 reference, neutral language. Fix gaps in the skill if any.
+Dispatch a subagent with the three files as context and raw facts ("SQLi in /api/login username param, confirmed via Burp, dumps users table"). Verify output: correct spine, names the weakness (not "vulnerability"), justified severity with vector, reproducible redacted PoC, actionable remediation, CWE-89 reference, neutral language (no "attacker"/"vulnerability"/"unauthorized access"). Fix gaps in the skill if any.
 
 - [ ] **Step 5: Commit**
 
@@ -347,7 +378,7 @@ Reference for the hard parts:
 
 - [ ] **Step 2: Write `incident-report-template.md`**
 
-Skeleton with headed sections: `Metadata` (report ID, TLP classification, author, date, version, distribution, status draft/final), `Executive Summary` (non-technical), `Incident Overview/Classification` (type, severity, detection source, key dates), `Timeline` (UTC table), `Technical Detail / Root Cause`, `Impact & Scope` (systems: confirmed compromised vs. potentially exposed vs. cleared; data: *accessed* vs. *exfiltrated* vs. at-risk; business/regulatory), `Indicators of Compromise` (defanged table), `MITRE ATT&CK Mapping`, `Response Actions` (PICERL phases, who/what/when), `Lessons Learned` (blameless; what went well + improve; corrective actions with owner + due date + priority), `Appendices`.
+Skeleton with headed sections: `Metadata` (report ID, TLP classification, author, date, version, distribution, status draft/final), `Executive Summary` (non-technical), `Incident Overview/Classification` (type, severity, detection source, key dates), `Timeline` (UTC table), `Technical Detail / Root Cause`, `Impact & Scope` (systems: confirmed compromised vs. potentially exposed vs. cleared; data: *accessed* vs. *exfiltrated* vs. at-risk; business; regulatory implications stated as "may have implications under [framework] — recommend review by compliance/counsel", never as an asserted violation), `Indicators of Compromise` (defanged table), `MITRE ATT&CK Mapping`, `Response Actions` (PICERL phases, who/what/when), `Lessons Learned` (blameless; what went well + improve; corrective actions with owner + due date + priority), `Appendices`.
 
 - [ ] **Step 3: Write `SKILL.md`**
 
@@ -390,7 +421,7 @@ Authoritative source tiers (in credibility order): government/standards (NIST SP
 
 - [ ] **Step 2: Write `exec-summary-template.md`**
 
-Skeleton, descending priority, ~1 page: `BLUF` (≤3 sentences: situation + impact + the ask), `Context` (2–4 sentences), `Key Points` (3–5 bullets, point-first), `Risk / Business Impact` (quantified: $, downtime, records, % systems, compliance), `Recommendations / Decisions Needed` (prioritized; owner, cost, timeline, exact decision requested), `References` (annotated).
+Skeleton, descending priority, ~1 page: `BLUF` (≤3 sentences: situation + impact + the ask), `Context` (2–4 sentences), `Key Points` (3–5 bullets, point-first), `Risk / Business Impact` (quantified: $, downtime, records, % systems; any regulatory angle phrased as a flagged consideration — "may warrant review under [framework]" — never an asserted violation or legal opinion), `Recommendations / Decisions Needed` (prioritized; owner, cost, timeline, exact decision requested), `References` (annotated).
 
 - [ ] **Step 3: Write `SKILL.md`**
 
