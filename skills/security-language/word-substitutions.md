@@ -55,13 +55,13 @@ Never use the following terms in security assessments or recommendations:
 
 | Term | Replace with |
 |---|---|
-| unhackable | reduces the likelihood of … |
-| 100% secure | no evidence of X was found |
-| fully secure | mitigates … |
-| fully eliminated | reduces the likelihood of … |
-| completely eliminated | reduces the likelihood of … |
-| guaranteed | no evidence of X was found; assessed with high confidence |
-| impossible | no evidence of X was found; assessed with high confidence |
-| cannot be breached | reduces the likelihood of … |
+| unhackable | reduces the likelihood of …; mitigates … |
+| 100% secure | reduces the likelihood of …; mitigates … |
+| fully secure | reduces the likelihood of …; mitigates … |
+| fully eliminated | mitigates; reduces residual risk |
+| completely eliminated | mitigates; reduces residual risk |
+| guaranteed | reduces the likelihood of; no absolute claim — state residual risk |
+| impossible | reduces the likelihood of; no absolute claim — state residual risk |
+| cannot be breached | reduces the likelihood of …; mitigates … |
 
 **Why:** Absolutes create contractual and legal exposure, are epistemically false in security, and undermine credibility if later refuted. Replace with probabilistic language (see `estimative-language.md`).

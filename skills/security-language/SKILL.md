@@ -96,7 +96,7 @@ Security reports address systems and processes, not people.
 
 Before finalizing any security document, check for these:
 
-- [ ] I wrote "attacker," "hacker," or "threat actor" without confirming the report's defined terminology.
+- [ ] I wrote "attacker" or "hacker".
 - [ ] I wrote "vulnerability" for an unconfirmed or alleged issue (should be "weakness," "finding," or "observed condition").
 - [ ] I wrote "unauthorized access" instead of stating whether authentication occurred, whether authorization was held, and what was accessed.
 - [ ] I stated exfiltration, theft, or data loss as confirmed fact without a sourced log entry or forensic finding — it should be "assessed … likely."
