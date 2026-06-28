@@ -19,10 +19,12 @@ def test_flags_absolute():
 
 def test_flags_legal_term():
     r = run("This was a breach.")
+    assert r.returncode == 1
     assert "legal-term" in r.stdout
 
 def test_flags_second_person_blame():
     r = run("You failed to apply the patch.")
+    assert r.returncode == 1
     assert "second-person-blame" in r.stdout
 
 def test_flags_compliance_opinion():
@@ -62,3 +64,11 @@ def test_json_output():
     data = json.loads(r.stdout)
     assert data[0]["category"] == "loaded-term"
     assert data[0]["term"].lower() == "attacker"
+
+def test_missing_file_exits_2():
+    r = subprocess.run(
+        [sys.executable, str(SCRIPT), "/nonexistent/path/that/does_not_exist.txt"],
+        capture_output=True, text=True,
+    )
+    assert r.returncode == 2
+    assert r.stderr  # a message should appear on stderr

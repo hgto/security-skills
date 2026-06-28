@@ -39,6 +39,8 @@ LOADED = {
     "campaign": "sustained activity / related set of events",
     "destroyed": "rendered unavailable / deleted / encrypted",
     "wiped": "rendered unavailable / deleted / encrypted",
+    "spy": "collection of information beyond approved scope",
+    "espionage": "collection of information beyond approved scope",
 }
 
 # Legal terms of art
@@ -104,12 +106,21 @@ def _sorted_by_length(d):
     return sorted(d.items(), key=lambda kv: len(kv[0]), reverse=True)
 
 
+def _compile_category(d):
+    """Return list of (compiled_pattern, term, suggestion) sorted longest term first."""
+    return [
+        (re.compile(r"\b" + re.escape(term) + r"\b", re.IGNORECASE), term, suggestion)
+        for term, suggestion in _sorted_by_length(d)
+    ]
+
+
+# Precompile all patterns once at module load.
 CATEGORIES = [
-    ("loaded-term",              _sorted_by_length(LOADED)),
-    ("legal-term",               _sorted_by_length(LEGAL)),
-    ("hyperbole",                _sorted_by_length(HYPERBOLE)),
-    ("absolute",                 _sorted_by_length(ABSOLUTES)),
-    ("legal-compliance-opinion", _sorted_by_length(COMPLIANCE)),
+    ("loaded-term",              _compile_category(LOADED)),
+    ("legal-term",               _compile_category(LEGAL)),
+    ("hyperbole",                _compile_category(HYPERBOLE)),
+    ("absolute",                 _compile_category(ABSOLUTES)),
+    ("legal-compliance-opinion", _compile_category(COMPLIANCE)),
 ]
 
 # ---------------------------------------------------------------------------
@@ -132,12 +143,8 @@ def lint_lines(lines):
             return True
 
         # Process each category in order.
-        for category, term_pairs in CATEGORIES:
-            for term, suggestion in term_pairs:
-                pattern = re.compile(
-                    r"\b" + re.escape(term) + r"\b",
-                    re.IGNORECASE,
-                )
+        for category, compiled_entries in CATEGORIES:
+            for pattern, term, suggestion in compiled_entries:
                 for m in pattern.finditer(raw_line):
                     start, end = m.start(), m.end()
                     if not span_is_free(start, end):
@@ -181,8 +188,12 @@ def main():
     file_args = [a for a in args if a != "--json"]
 
     if file_args:
-        with open(file_args[0], encoding="utf-8") as fh:
-            lines = fh.readlines()
+        try:
+            with open(file_args[0], encoding="utf-8") as fh:
+                lines = fh.readlines()
+        except OSError as exc:
+            print(f"verify-language: cannot open file: {exc}", file=sys.stderr)
+            sys.exit(2)
     else:
         lines = sys.stdin.readlines()
 
