@@ -11,7 +11,7 @@ description: (hgto/security-skills) Use when writing up a security finding, vuln
 
 This skill structures a single security finding so that it is defensible, actionable, and readable by both technical and non-technical audiences. Every finding follows the same spine:
 
-1. **Title** — names the weakness class, not the symptom and not a generic label
+1. **Header** — the finding number plus its title (e.g. `## 1. SQL Injection — /api/login username Parameter`); names the weakness class, not the symptom or a generic label
 2. **Severity** — justified with a full CVSS vector string or an OWASP Risk Rating factor table; never a bare label
 3. **Affected Assets** — precise: host, URL, parameter, component version, environment
 4. **Description** — root cause and mechanism; distinguishes instance from class
@@ -49,7 +49,9 @@ Do not use this skill to write an executive summary, an incident report, or a fu
 
 ## 4. The Spine in Detail
 
-### 4.1 Title
+### 4.1 Header
+
+The header is the finding number plus the title — e.g. `## 1. SQL Injection — /api/login username Parameter`. Number findings simply: 1, 2, 3, 4. Do not label the field "Title" and do not use a `PREFIX-YYYY-NNN` ID.
 
 Name the weakness, not the symptom. The title is the most-read field in any finding list.
 
