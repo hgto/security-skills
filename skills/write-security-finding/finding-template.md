@@ -6,17 +6,11 @@ Replace all placeholder text in `<angle brackets>` before delivery.
 
 ---
 
-## Finding ID
+## `<N>. <Finding title>` **[REQUIRED]**
 
-`<PREFIX-YYYY-NNN>` — e.g., `PEN-2026-007` or `CR-2026-042`
+The finding's header is its number plus its title — nothing else. Number findings sequentially: 1, 2, 3, 4. Do not add a separate "Title" field or a `PREFIX-YYYY-NNN` ID.
 
-Assign a sequential identifier scoped to the engagement or review. This ID is the stable reference for tracking and deduplication.
-
----
-
-## Title **[REQUIRED]**
-
-`<Name the weakness or finding — NOT the symptom and NOT a generic label>`
+e.g. `## 1. SQL Injection — /api/login username Parameter`
 
 **Rules for the title:**
 - Name the weakness class, not the symptom or the observable artifact. "SQL Injection in Login Endpoint" is correct. "Database Error Returned to Client" names a symptom. "Security Issue in Login" is too vague.
@@ -25,24 +19,22 @@ Assign a sequential identifier scoped to the engagement or review. This ID is th
 - Keep it under 80 characters.
 
 **Examples:**
-- SQL Injection — `/api/login` `username` Parameter
-- Reflected Cross-Site Scripting — `/search` `q` Parameter
-- Missing Authorization Check on Administrative Endpoint `/admin/users`
-- Insecure Direct Object Reference — Order Records Accessible Without Ownership Verification
+- 1. SQL Injection — `/api/login` `username` Parameter
+- 2. Reflected Cross-Site Scripting — `/search` `q` Parameter
+- 3. Missing Authorization Check on Administrative Endpoint `/admin/users`
+- 4. Insecure Direct Object Reference — Order Records Accessible Without Ownership Verification
 
 ---
 
 ## Severity **[REQUIRED]**
 
-**Rating:** `<None | Low | Medium | High | Critical>`
+Single dense line — rating, then the full vector string, then the score:
 
-**Method:** `<CVSS v3.1 | CVSS v4.0 | OWASP Risk Rating>`
+`<Rating> — <full vector string> → <score>`
 
-**Score/Vector:**
+e.g. `Critical — CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H → 9.8`
 
-```
-<Full vector string — e.g., CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N → 8.1 (High)>
-```
+(For OWASP Risk Rating, give the rating then the Likelihood × Impact result — e.g. `High — Likelihood 6.5 × Impact 7.0`.)
 
 **Metric Rationale:**
 
