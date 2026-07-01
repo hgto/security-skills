@@ -36,7 +36,7 @@ This skill applies the `security-language` standard to an existing draft. Mechan
    - "hacker" / "attacker" → "external party" or "threat actor"
    - "breach" → "incident" or "inappropriate access" (pending counsel confirmation)
    - "stolen" → "accessed" or "transferred"
-   - "leaked" / "leak" / "leaking" / "leakage" → "accessed," "transferred," or "observed leaving"
+   - "leaked" / "leak" / "leaking" / "leakage" → "accessed," "transferred," or "observed leaving" (unconfirmed), or "information disclosure," "disclosed," or "inappropriately accessed" (confirmed)
    - "catastrophic" → quantify: "affected N records" or "resulted in X hours of unavailability"
 
 4. **Demote unsourced claims to assessments.** Any inference or conclusion that is not directly observed must carry an explicit likelihood qualifier and a confidence level. Canonical form:
