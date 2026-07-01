@@ -38,6 +38,7 @@ Use neutral terms. See `word-substitutions.md` for the full substitution table a
 
 - Use "external party" or "threat actor." Never "attacker" or "hacker" — both presume hostile intent and attribution.
 - Never assert "breach" or "stolen" until confirmed by counsel; both are legal terms of art that trigger regulatory duties.
+- Never write "leak" (or "leaked," "leaking," "leakage"). It conflates two different claims: use "accessed," "transferred," or "observed leaving" when it is not yet confirmed that an unauthorized party obtained the data; use "information disclosure," "disclosed," or "inappropriately accessed" when that access is confirmed.
 - Never write "vulnerability" when referring to an unconfirmed or alleged issue. Write "weakness," "potential weakness," "finding," or "observed condition." The term "vulnerability" infers a confirmed issue and is a compliance trigger. Proper nouns (CVE identifiers, CWE identifiers, CVSS scores) are kept as-is.
 - Never write "unauthorized access." The phrase is ambiguous: it conflates whether authentication occurred with whether the actor was authorized. Instead, write "inappropriate access" and state specifically: (a) whether authentication occurred, (b) whether the actor held authorization for that resource, and (c) what was accessed.
 
@@ -99,7 +100,8 @@ Before finalizing any security document, check for these:
 - [ ] I wrote "attacker" or "hacker".
 - [ ] I wrote "vulnerability" for an unconfirmed or alleged issue (should be "weakness," "finding," or "observed condition").
 - [ ] I wrote "unauthorized access" instead of stating whether authentication occurred, whether authorization was held, and what was accessed.
-- [ ] I stated exfiltration, theft, or data loss as confirmed fact without a sourced log entry or forensic finding — it should be "assessed … likely."
+- [ ] I stated exfiltration, theft, leakage, or data loss as confirmed fact without a sourced log entry or forensic finding — it should be "assessed … likely."
+- [ ] I wrote "leak," "leaked," "leaking," or "leakage" instead of "accessed"/"transferred"/"observed leaving" (unconfirmed) or "information disclosure"/"disclosed"/"inappropriately accessed" (confirmed).
 - [ ] I used an absolute: "unhackable," "100% secure," "fully eliminated," "guaranteed," "impossible," "cannot be breached."
 - [ ] I named or described an individual in a way that assigns personal blame.
 - [ ] I called the event a "breach" before counsel confirmed it meets the regulatory definition.
@@ -116,6 +118,7 @@ These are common objections to the security-language standard, with responses.
 | "'Attacker' is just clearer — everyone knows what it means." | Clarity does not require an intent-plus-attribution claim. "External party" and "threat actor" are equally clear to any security audience and remain defensible if attribution later changes or is contested. |
 | "'Breach' is the industry word — clients expect it." | "Breach" is a regulatory term of art in HIPAA, GDPR, state notification laws, and others. Using it prematurely triggers notification duties and shapes legal exposure before counsel has assessed the facts. "Incident" or "inappropriate access" conveys the same information without that risk. |
 | "'Stolen' is accurate — the data left the network." | Data leaving the network is an observation. "Stolen" is a legal conclusion about intent and authorization that requires a court or regulatory determination. Write "transferred," "copied," or "observed leaving" and let counsel assess the legal characterization. |
+| "'Leaked' is softer than 'stolen' — it's fine to say data leaked." | "Leaked" still asserts that an unauthorized party obtained the data — the same unconfirmed legal conclusion as "stolen" or "exfiltrated," just gentler-sounding. If that is not yet confirmed, write "accessed," "transferred," or "observed leaving." If confirmed, write "information disclosure," "disclosed," or "inappropriately accessed." |
 | "'Vulnerability' is the right word — there's clearly a bug." | "Vulnerability" has a defined meaning in CVE/CVSS that implies confirmed exploitability. Calling an unconfirmed finding a "vulnerability" before full assessment is a compliance trigger and may overstate certainty. Use "weakness," "potential weakness," or "finding" until the assessment is complete. |
 | "Saying 'this violates GDPR' is just being direct and helpful." | Rendering a regulatory opinion requires legal expertise and creates discovery risk. It may also be wrong, and a wrong legal conclusion in a report is worse than none. State the observed condition and flag it for compliance/counsel — that is the helpful, accurate, and defensible path. |
 | "Using 'almost certain' instead of 'certain' sounds weak and hedged." | "Certain" is an absolute that is epistemically false in security contexts and creates legal exposure if later refuted. "Almost certain" (95–99%) conveys the same high probability while remaining calibrated and defensible. Precision is not weakness; overstatement is. |

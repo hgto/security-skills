@@ -16,6 +16,7 @@ This table is authoritative for all security writing produced under the `securit
 | breach | incident, event, inappropriate access (state auth/authz + what was accessed) | regulatory term of art; triggers duties | YES — escalate to counsel |
 | compromised (unconfirmed) | potentially affected, exposed to, accessed by | implies confirmed control | no |
 | stolen / exfiltrated (unconfirmed) | accessed, transferred, copied, observed leaving | theft is a legal conclusion | YES — escalate to counsel |
+| leak / leaked / leaking / leakage | if access unconfirmed: accessed, transferred, copied, observed leaving; if access is confirmed: information disclosure, disclosed, inappropriately accessed | "leak" presumes a confirmed unauthorized-disclosure/exfiltration conclusion; state what is actually established | YES — escalate to counsel |
 | malicious | anomalous, unexpected, unsanctioned | intent claim, often unprovable | no |
 | hacked | inappropriately accessed (detail what was accessed) | imprecise, sensational | no |
 | vulnerability | weakness, potential weakness, finding, observed condition | infers a confirmed issue; compliance trigger | no — see Proper-Noun Exemption below |
@@ -69,7 +70,7 @@ Never assert that an observed event constitutes a "violation," that a compliance
 - Do not write: "This is a HIPAA violation."
 - Write instead: "Protected health information was accessible without authentication; this may have implications under HIPAA — recommend review by compliance/counsel."
 
-This principle extends every legal-term-of-art row in the table above (`breach`, `negligent`, `stolen / exfiltrated`, `violation`, `violates [regulation]`, `illegal / unlawful`). When those terms appear, the substitution is mandatory and a counsel/compliance flag is required.
+This principle extends every legal-term-of-art row in the table above (`breach`, `negligent`, `stolen / exfiltrated`, `leak / leaked / leaking / leakage`, `violation`, `violates [regulation]`, `illegal / unlawful`). When those terms appear, the substitution is mandatory and a counsel/compliance flag is required.
 
 ---
 

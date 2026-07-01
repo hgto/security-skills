@@ -22,6 +22,23 @@ def test_flags_legal_term():
     assert r.returncode == 1
     assert "legal-term" in r.stdout
 
+def test_flags_leaked():
+    r = run("The data leaked to the public.")
+    assert r.returncode == 1
+    assert "legal-term" in r.stdout
+    assert "observed leaving" in r.stdout
+
+def test_flags_leak_forms():
+    for sentence in (
+        "The database may leak customer records.",
+        "Several leaks were reported by the press.",
+        "The server has been leaking data for weeks.",
+        "Data leakage was identified during the review.",
+    ):
+        r = run(sentence)
+        assert r.returncode == 1, sentence
+        assert "legal-term" in r.stdout, sentence
+
 def test_flags_second_person_blame():
     r = run("You failed to apply the patch.")
     assert r.returncode == 1
