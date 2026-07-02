@@ -1,0 +1,34 @@
+---
+name: settle
+description: (hgto/security-skills) Use when asked to settle, finalize, or wrap up a pull request or branch end-to-end before merge — the full pipeline of security review to resolution, comment/doc cleanup, and opening a draft PR with a Slack heads-up. Trigger on "settle this PR", "get this branch ready to merge", "run the full settle pipeline on this branch". If the user only wants one stage — just the security review, just the comment cleanup, just opening the PR — use that stage's own skill directly (settle-security, settle-comments-and-docs, settle-draft-pr) instead of this orchestrator.
+---
+
+## 1. Overview
+
+This skill runs three sub-skills, strictly in order, each of which is also independently invocable:
+
+1. **settle-security** — loops `/security-review` against human-approved fixes until the human signs off.
+2. **settle-comments-and-docs** — tidies comments and docs on the changed files without touching logic.
+3. **settle-draft-pr** — opens the draft PR and sends the human a Slack DM.
+
+The order is load-bearing, not stylistic: security fixes must land before the comment pass touches the same files (otherwise the comment pass reads a diff that's about to change again), and both must land before the PR is opened (a reviewer should see the settled diff, not a work-in-progress one).
+
+## 2. Precondition
+
+Confirm the current branch is not `main`/`master` and has commits ahead of its base. If not, stop and ask the user to check out or create a feature branch first — none of the three stages can proceed without one.
+
+## 3. Procedure
+
+1. Run **settle-security** to completion. It owns its own human-in-the-loop review cycle — do not move to the next stage until it reports the human explicitly signed off (not just "no findings this round," but the human ending the loop).
+2. Run **settle-comments-and-docs**.
+3. Run **settle-draft-pr**.
+
+Each stage recomputes the branch's changed-file set for itself when it starts, since the prior stage may have added commits — don't try to precompute or cache this in the orchestrator.
+
+## 4. Common Mistakes
+
+| Mistake | What it looks like | Correct approach |
+|---|---|---|
+| Skipping a stage's checkpoint | Moving to comment cleanup while security findings are still open, to "save time" | Each stage's own human checkpoint is non-negotiable, even when run from this orchestrator |
+| Running stages out of order | Opening the PR before the comment pass | Follow the fixed order — later stages assume earlier ones already landed |
+| Restarting from scratch after an interruption | Re-running settle-security's whole loop after the human already signed off in a prior session | Check for existing progress (e.g., a security fix-up commit already on the branch) before re-looping |
