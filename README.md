@@ -9,6 +9,10 @@ A Claude Code plugin providing skills for writing security findings, incident re
 - **write-security-finding** — Produces a single, structured security finding (title, CVSS/OWASP severity with full vector, evidence with numbered repro steps, two-tier remediation). Use for penetration-test results, code-review issues, audit observations, and scanner findings that require a defensible write-up.
 - **write-security-incident-report** — Structures a security incident report following NIST SP 800-61 phases and the SANS PICERL framework: ISO 8601 UTC timeline, fact-vs-assessment separation, IOC table with defanged network indicators, MITRE ATT&CK mapping, and blameless lessons learned.
 - **write-security-executive-summary** — Produces a BLUF-first, one-page leadership briefing that translates technical findings into business consequences with quantified risk, sourced claims (annotated references with issuer/identifier/date), and specific recommendations with owners and deadlines.
+- **settle** — Orchestrates the three skills below, in order, to take a branch from finished changes to an open draft PR. Workflow skills rather than report-writing ones; they don't use `security-language` directly (though `settle-security` routes finding language through it).
+- **settle-security** — Loops `/security-review` against human-approved fixes — review, human decides fix/alternative/waive, apply, re-review — until the human signs off.
+- **settle-comments-and-docs** — Dispatches parallel subagents to tidy comments and docs on the branch's changed files against a keep/cut rubric, without touching logic.
+- **settle-draft-pr** — Opens the draft PR (using the repo's template or a What/Why/How body), posts the final security review with the scanned commit SHA, and sends the human a personal Slack DM in `pr-review-request` format.
 
 ### How they work together
 
@@ -40,6 +44,26 @@ Build a NIST/PICERL incident report from investigation notes, log exports, or a 
 /write-security-executive-summary
 ```
 Translate a technical report or incident into a BLUF-first, one-page leadership briefing.
+
+```
+/settle
+```
+Run the full pipeline on the current branch: security review to resolution, comment/doc cleanup, then a draft PR with a Slack DM.
+
+```
+/settle-security
+```
+Loop the security review against human-approved fixes until the branch is clean or accepted risks are explicit.
+
+```
+/settle-comments-and-docs
+```
+Tidy comments and docs on the branch's changed files without touching logic.
+
+```
+/settle-draft-pr
+```
+Open the draft PR, post the final security review with the scanned commit SHA, and DM the human on Slack.
 
 ### Note on linter scope
 
