@@ -26,6 +26,8 @@ Spawn one subagent per file or small batch, in parallel (single message, multipl
 - The file(s) to work on, plus the surrounding diff for context — they're revising comments to fit the *current* code, not the pre-change version.
 - The full contents of `comment-rubric.md`.
 - An explicit instruction: **touch only comments, docstrings, and doc prose — never executable code, imports, or signatures.** If a comment is wrong because the code changed, fix the comment, not the code.
+- **Apply the rubric's test to every comment you keep:** does it leave value that's expensive or complex to reconstruct from the code? If yes, keep only the sentence(s) carrying that value and cut the rest. If no, cut it.
+- **Don't introduce duplication.** When the changed-file set touches related sites (a definition and its callers), avoid restating the same WHY at more than one site — document it once at the definition and, at the call sites, either say nothing or point to it. Do NOT add cross-reference sentences that duplicate a definition's comment.
 
 Have each subagent return a short summary of what it changed and why.
 
@@ -41,3 +43,4 @@ Run `git diff` yourself and confirm no non-comment lines changed — a comment-o
 | Comment references the session | New comment reads "// fixed per settle run" | Apply `comment-rubric.md` — state the durable reason, never the task/session that touched it |
 | Scope creep | Rewriting comments repo-wide instead of on the changed files | Recompute the changed-file set from the diff each time; stay inside it |
 | Skipping doc files | Only touching source comments, leaving a stale README paragraph next to it | The changed-file set includes docs that reference the changed code, not just source |
+| Cleanup adds duplication | A subagent adds "// same reason as X" to a caller, restating the definition's comment | Document the WHY once at the definition; callers point to it or stay silent |
