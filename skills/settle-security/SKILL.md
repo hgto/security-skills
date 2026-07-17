@@ -17,10 +17,10 @@ Confirm the current branch is not `main`/`master` — if it is, stop and ask the
 
 Repeat until the human ends it:
 
-1. **Review.** Use OpenCode's Task tool to spawn a general-purpose subagent for a focused security review of the pending changes (`git diff <merge-base>...HEAD`). Instruct it to inspect the surrounding code and return, per finding: title, severity, location, exploitation path, and a recommended fix. Record the commit scanned (`git rev-parse HEAD`) alongside the findings; later stages need this SHA.
+1. **Review.** Use OpenCode's Skill tool to load and execute `security-review` against the pending changes. Preserve its structured findings and scanned SHA; later stages need both.
 2. **Present and ask.** Show the findings to the human. If any exist, use OpenCode's Question tool (or plain conversation for a large finding set) to ask whether to apply the recommended fix, take an alternative approach the human specifies, or accept/waive the risk with a stated reason. Route finding language through the `security-language` and `write-security-finding` skills when a formal write-up is useful; do not invent new severity or wording conventions here.
 3. **Resolve.** Apply whatever the human chose (directly, or via a subagent for a larger fix). Commit the result to the branch with a message describing the fix, not the review process.
-4. **Re-review.** Run the focused security review again against the new HEAD and return to step 2.
+4. **Re-review.** Load and execute `security-review` again against the new HEAD and return to step 2.
 
 Exit only on explicit human sign-off. "No findings this round" is one valid exit condition; "the remaining items are accepted risks" is another — but the human must say so, not the skill inferring it from an empty finding list without asking. Keep every round's findings and scanned SHA. Return the last round's result, resolved findings, accepted items and reasons, and scanned SHA to `settle-draft-pr`, which records them at the bottom of the PR description.
 

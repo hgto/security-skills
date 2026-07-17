@@ -9,6 +9,7 @@ An OpenCode skill collection for writing security findings, incident reports, an
 - **write-security-finding** — Produces a single, structured security finding (title, CVSS/OWASP severity with full vector, evidence with numbered repro steps, two-tier remediation). Use for penetration-test results, code-review issues, audit observations, and scanner findings that require a defensible write-up.
 - **write-security-incident-report** — Structures a security incident report following NIST SP 800-61 phases and the SANS PICERL framework: ISO 8601 UTC timeline, fact-vs-assessment separation, IOC table with defanged network indicators, MITRE ATT&CK mapping, and blameless lessons learned.
 - **write-security-executive-summary** — Produces a BLUF-first, one-page leadership briefing that translates technical findings into business consequences with quantified risk, sourced claims (annotated references with issuer/identifier/date), and specific recommendations with owners and deadlines.
+- **security-review** — Reviews the current branch diff for concrete High and Medium security vulnerabilities, then independently validates each candidate and discards findings below 8/10 confidence.
 - **settle** — Orchestrates the three skills below, in order, to take a branch from finished changes to an open draft PR. Workflow skills rather than report-writing ones; they don't use `security-language` directly (though `settle-security` routes finding language through it).
 - **settle-security** — Loops focused security reviews against human-approved fixes — review, human decides fix/alternative/waive, apply, re-review — until the human signs off.
 - **settle-comments-and-docs** — Dispatches parallel subagents to tidy comments and docs on the branch's changed files against a keep/cut rubric, without touching logic.
@@ -43,6 +44,10 @@ Translate a technical report or incident into a BLUF-first, one-page leadership 
 > Settle this branch.
 
 Run the full pipeline on the current branch: security review to resolution, comment/doc cleanup, then a draft PR with a Slack DM.
+
+> Run a security review of this branch.
+
+Review the pending branch changes for concrete vulnerabilities and independently filter false positives.
 
 > Run the settle-security review loop on this branch.
 

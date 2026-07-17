@@ -17,7 +17,7 @@ Confirm the current branch is not `main`/`master`. This skill assumes `settle-se
 - The **last round's security findings and the commit SHA scanned**, from `settle-security`.
 - A clean working tree with all fixes and cleanup already committed.
 
-If that context is not available (this skill is being run standalone), reconstruct it by using OpenCode's Task tool to run one focused security review against the current HEAD.
+If that context is not available (this skill is being run standalone), reconstruct it by using OpenCode's Skill tool to load and execute `security-review` against the current HEAD.
 
 ## 3. Open the Draft PR
 
@@ -42,7 +42,7 @@ Append an idempotent final section to the PR description using this shape:
 
 Use one `## Security review` section. Replace an existing section rather than appending a duplicate. Preserve the rest of the PR description exactly.
 
-The scanned SHA must equal the PR branch's current `HEAD`. Because `settle-comments-and-docs` normally commits after `settle-security`, run a fresh focused security review here whenever the recorded SHA differs from `HEAD`. Update the section with that result before creating or updating the PR.
+The scanned SHA must equal the PR branch's current `HEAD`. Because `settle-comments-and-docs` normally commits after `settle-security`, load and execute `security-review` again whenever the recorded SHA differs from `HEAD`. Update the section with that result before creating or updating the PR.
 
 **Never post the security result as a PR comment or review.** Use the PR body through `gh pr create --body-file` / `gh pr edit --body-file`, or the GitHub MCP create/update pull-request tools. Do not use issue-comment or review-comment tools for this result.
 
