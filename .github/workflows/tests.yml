@@ -15,5 +15,5 @@ jobs:
           python-version: "3.12"
       - name: Install pytest
         run: python -m pip install --upgrade pip pytest
-      - name: Run verify-language linter tests
-        run: python -m pytest skills/verify-security-language -v
+      - name: Run tests
+        run: python -m pytest -v

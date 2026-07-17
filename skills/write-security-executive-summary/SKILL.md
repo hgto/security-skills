@@ -5,6 +5,8 @@ description: (hgto/security-skills) Use when writing an executive summary or lea
 
 **REQUIRED SUB-SKILL:** security-language
 
+Use OpenCode's Skill tool to load `security-language` before drafting the summary.
+
 ---
 
 ## 1. Overview
@@ -59,7 +61,7 @@ Do not use this skill to write a detailed technical finding, an incident timelin
 
 6. **Review for language compliance.** Apply the language rules in Section 6 of this skill and the `security-language` standard throughout.
 
-7. **Before delivering, run `verify-security-language`** on the draft and confirm it exits clean.
+7. **Before delivering, use OpenCode's Skill tool to load `verify-security-language`**, apply it to the draft, and confirm the linter exits clean.
 
 ---
 

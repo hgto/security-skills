@@ -1,6 +1,6 @@
 ---
 name: settle-comments-and-docs
-description: (hgto/security-skills) Use when asked to clean up comments and documentation on a branch or PR's changed files — dispatching parallel subagents to apply a keep/cut comment rubric so comments and docs are coherent with the code, concise, and pitched at the right level of detail, without touching logic. Trigger on "tidy the comments on this branch", "clean up the docs before merge", "make the comments coherent with the code", or as the second stage of /settle.
+description: (hgto/security-skills) Use when asked to clean up comments and documentation on a branch or PR's changed files — dispatching parallel subagents to apply a keep/cut comment rubric so comments and docs are coherent with the code, concise, and pitched at the right level of detail, without touching logic. Trigger on "tidy the comments on this branch", "clean up the docs before merge", "make the comments coherent with the code", or as the second stage of settle.
 ---
 
 ## 1. Overview
@@ -21,7 +21,7 @@ Confirm the current branch is not `main`/`master`. Compute the changed-file set 
 
 ## 4. Dispatch Subagents
 
-Spawn one subagent per file or small batch, in parallel (single message, multiple tool calls), each with `model: "sonnet"` and given:
+Use OpenCode's Task tool to spawn one general-purpose subagent per file or small batch. Launch independent tasks in parallel, and give each subagent:
 
 - The file(s) to work on, plus the surrounding diff for context — they're revising comments to fit the *current* code, not the pre-change version.
 - The full contents of `comment-rubric.md`.

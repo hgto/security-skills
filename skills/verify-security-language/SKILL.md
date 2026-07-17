@@ -9,6 +9,8 @@ This skill applies the `security-language` standard to an existing draft. Mechan
 
 **REQUIRED SUB-SKILL:** security-language
 
+Use OpenCode's Skill tool to load `security-language` before applying this procedure.
+
 ---
 
 ## 2. Procedure

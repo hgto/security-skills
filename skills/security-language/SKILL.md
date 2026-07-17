@@ -11,7 +11,7 @@ Every assertion in a security document must be traceable to evidence. The securi
 2. **Neutral, defensible language.** Word choice that presumes intent, renders legal conclusions, or assigns blame creates liability and undermines credibility.
 3. **Calibrated uncertainty.** Likelihood and confidence are quantified on explicit scales; absolutes are never used.
 
-This skill governs all security prose. All document-level skills in this plugin depend on it.
+This skill governs all security prose. All document-level skills in this collection depend on it.
 
 ---
 

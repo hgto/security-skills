@@ -5,7 +5,7 @@ description: (hgto/security-skills) Use when writing a security incident report,
 
 **REQUIRED SUB-SKILL:** security-language
 
-Invoke `security-language` before beginning. Its rules govern every word choice, fact/assessment distinction, likelihood qualifier, and confidence level in the report. Pay particular attention to likelihood-vs-confidence (two separate axes, never collapsed) and IOC defanging (all network IOCs in human-readable sections must be defanged).
+Use OpenCode's Skill tool to load `security-language` before beginning. Its rules govern every word choice, fact/assessment distinction, likelihood qualifier, and confidence level in the report. Pay particular attention to likelihood-vs-confidence (two separate axes, never collapsed) and IOC defanging (all network IOCs in human-readable sections must be defanged).
 
 ---
 
@@ -60,7 +60,7 @@ Do not use this skill to write a security finding from a penetration test or aud
 8. Complete **Response Actions** in PICERL order with timestamps, responsible roles, and outcomes.
 9. Write **Lessons Learned** blameless. Attribute findings to systems, processes, and controls. Every corrective action must have an owner (by role) and a due date.
 10. Write the **Executive Summary** last — it summarizes the completed report in plain language for non-technical leadership.
-11. Before delivering, run `verify-security-language` on the full draft.
+11. Before delivering, use OpenCode's Skill tool to load `verify-security-language` and apply it to the full draft.
 
 ---
 
@@ -97,4 +97,4 @@ This skill inherits all language rules from the `security-language` standard. Th
 
 ## 7. Final Step — Before Delivery
 
-Run `verify-security-language` on the completed draft. Confirm exit 0 before delivering the report. Do not deliver a draft that exits non-zero.
+Use OpenCode's Skill tool to load `verify-security-language` and apply it to the completed draft. Confirm exit 0 before delivering the report. Do not deliver a draft that exits non-zero.

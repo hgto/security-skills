@@ -5,6 +5,8 @@ description: (hgto/security-skills) Use when writing up a security finding, vuln
 
 **REQUIRED SUB-SKILL:** security-language
 
+Use OpenCode's Skill tool to load `security-language` before drafting the finding.
+
 ---
 
 ## 1. Overview
@@ -135,4 +137,4 @@ This skill inherits all language rules from the `security-language` standard. Th
 3. For the Severity field, open `severity-rating.md` and complete either the CVSS metric table or the OWASP factor tables before writing the label.
 4. Write Evidence / PoC as numbered repro steps. Review every line for PII, credentials, and internal hostnames before including them.
 5. For Remediation, write both the short-term action and the durable fix. If you cannot write a specific durable fix, state what additional information is needed.
-6. Before delivering, run `verify-security-language` on the finding.
+6. Before delivering, use OpenCode's Skill tool to load `verify-security-language` and apply it to the finding.
