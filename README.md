@@ -11,7 +11,7 @@ An OpenCode skill collection for writing security findings, incident reports, an
 - **write-security-executive-summary** — Produces a BLUF-first, one-page leadership briefing that translates technical findings into business consequences with quantified risk, sourced claims (annotated references with issuer/identifier/date), and specific recommendations with owners and deadlines.
 - **security-review** — Reviews the current branch diff for concrete High and Medium security vulnerabilities, then independently validates each candidate and discards findings below 8/10 confidence.
 - **settle** — Orchestrates the three skills below, in order, to take a branch from finished changes to an open draft PR. Workflow skills rather than report-writing ones; they don't use `security-language` directly (though `settle-security` routes finding language through it).
-- **settle-security** — Loops focused security reviews against human-approved fixes — review, human decides fix/alternative/waive, apply, re-review — until the human signs off.
+- **settle-security** — Autonomously loops focused security reviews — review, assess, apply, re-review — until no actionable findings remain and the agent is satisfied.
 - **settle-comments-and-docs** — Dispatches parallel subagents to tidy comments and docs on the branch's changed files against a keep/cut rubric, without touching logic.
 - **settle-draft-pr** — Opens the draft PR (using the repo's template or a What/Why/How body), appends the final security review and scanned commit SHA to the PR description, and sends the human a personal Slack DM in `pr-review-request` format.
 
@@ -51,7 +51,7 @@ Review the pending branch changes for concrete vulnerabilities and independently
 
 > Run the settle-security review loop on this branch.
 
-Loop the security review against human-approved fixes until the branch is clean or accepted risks are explicit.
+Loop the security review, apply safe fixes, and re-review until no actionable findings remain and the agent is satisfied.
 
 > Tidy the comments and docs on this branch.
 

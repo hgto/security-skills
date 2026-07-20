@@ -7,7 +7,7 @@ description: (hgto/security-skills) Use when asked to settle, finalize, or wrap 
 
 This skill runs three sub-skills, strictly in order, each of which is also independently invocable:
 
-1. **settle-security** — loops focused security reviews against human-approved fixes until the human signs off.
+1. **settle-security** — autonomously fixes and re-reviews security findings until no actionable findings remain and the agent is satisfied.
 2. **settle-comments-and-docs** — tidies comments and docs on the changed files without touching logic.
 3. **settle-draft-pr** — opens the draft PR, records the final security result at the bottom of its description, and sends the human a Slack DM.
 
@@ -19,7 +19,7 @@ Confirm the current branch is not `main`/`master` and has commits ahead of its b
 
 ## 3. Procedure
 
-1. Use OpenCode's Skill tool to load and execute **settle-security** to completion. It owns its own human-in-the-loop review cycle — do not move to the next stage until it reports the human explicitly signed off (not just "no findings this round," but the human ending the loop).
+1. Use OpenCode's Skill tool to load and execute **settle-security** to completion. It owns its autonomous review cycle — do not move to the next stage until it reports no actionable findings remain and it is satisfied with the review coverage.
 2. Use OpenCode's Skill tool to load and execute **settle-comments-and-docs**.
 3. Use OpenCode's Skill tool to load and execute **settle-draft-pr**.
 
@@ -29,6 +29,6 @@ Each stage recomputes the branch's changed-file set for itself when it starts, s
 
 | Mistake | What it looks like | Correct approach |
 |---|---|---|
-| Skipping a stage's checkpoint | Moving to comment cleanup while security findings are still open, to "save time" | Each stage's own human checkpoint is non-negotiable, even when run from this orchestrator |
+| Skipping a stage's completion condition | Moving to comment cleanup while security findings are still open, to "save time" | Complete each stage's own exit condition before continuing |
 | Running stages out of order | Opening the PR before the comment pass | Follow the fixed order — later stages assume earlier ones already landed |
-| Restarting from scratch after an interruption | Re-running settle-security's whole loop after the human already signed off in a prior session | Check for existing progress (e.g., a security fix-up commit already on the branch) before re-looping |
+| Restarting from scratch after an interruption | Re-running settle-security's whole loop despite completed review rounds in a prior session | Check for existing progress (e.g., a security fix-up commit already on the branch) before re-looping |

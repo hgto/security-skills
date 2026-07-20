@@ -59,7 +59,7 @@ Notify the human directly rather than posting to a team channel — this is a pe
 
 | Mistake | What it looks like | Correct approach |
 |---|---|---|
-| Push without sign-off | Pushing and opening the PR without asking first | Confirm the push explicitly — it's a separate approval from everything already committed |
+| Push without approval | Pushing and opening the PR without asking first | Confirm the push explicitly — it's a separate approval from everything already committed |
 | Merging | Merging the PR once it's open | Out of scope — this skill stops at a draft PR |
 | Recording a stale review | Recording round-3 findings when a later commit already landed | Re-scan whenever the recorded SHA differs from `HEAD` |
 | Missing the scanned SHA | Recording findings without saying which commit they apply to | Always name the exact SHA in the PR description's security section |
