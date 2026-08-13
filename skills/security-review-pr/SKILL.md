@@ -7,7 +7,7 @@ description: (hgto/security-skills) Use when asked to run a security review agai
 
 This is not `security-review`. That skill reviews the *current local branch's* diff and is explicitly forbidden from posting anywhere — it returns a report to the caller only. This skill does the opposite: it takes one or more **live PR URLs**, which may span **multiple repositories** when they're stacked or companion PRs implementing one feature, and its entire purpose is to **publish** the findings as a real GitHub review — inline comments plus a submitted summary.
 
-Because publishing is the point, treat this with the same care as any other action visible to others (see §8 before submitting anything).
+Because publishing is the point, treat this with the same care as any other action visible to others (see §8 before submitting anything). **Hard boundary, no exceptions: every review this skill submits is either `COMMENT` or `REQUEST_CHANGES`. It never submits `APPROVE`, regardless of how clean a PR looks or how confident the analysis is.** Formal approval is a decision for a human reviewer to make, not this skill — its job ends at surfacing findings clearly enough for that human to decide quickly. This applies identically to every domain-specific subagent forked under §6; carry the rule forward explicitly into that subagent's instructions rather than assuming it infers it.
 
 ## 2. Gather Inputs
 
@@ -45,6 +45,7 @@ When the changeset includes a specialized area that deserves its own narrowly-sc
 - Exactly what the general pass already covered, so it doesn't restate those findings.
 - The exact PR(s) and files in its scope.
 - The classification rules (§7) and posting mechanics (§8) below, since it posts its **own** separate pending review rather than merging its findings into the main one.
+- An explicit, standalone instruction that it must submit `COMMENT` or `REQUEST_CHANGES` only, never `APPROVE` — don't rely on it picking this up implicitly from "posting mechanics," state it directly in the subagent's own prompt.
 
 ## 7. Classify Every Finding
 
@@ -67,7 +68,7 @@ For each PR carrying findings:
    - Name the other PRs in this review set (`owner/repo#N`), if any, so a reader on one PR knows to check the others.
    - Open with one or two sentences of genuine, specific observation about what's done well — a review that's only complaints reads as adversarial, not useful. Keep the tone factual, not effusive.
    - List findings grouped by tag (blocking, then nits, then can-fix-later) as short pointers to the inline comments, not restatements of their full text.
-4. Choose the review event: **REQUEST_CHANGES** if any finding is [BLOCKING], otherwise **COMMENT**. Never select **APPROVE** — formally approving a PR is a human call this skill should not make on anyone's behalf, no matter how clean the change looks.
+4. Choose the review event: **REQUEST_CHANGES** if any finding is [BLOCKING], otherwise **COMMENT**. These are the only two valid choices — see the hard boundary in §1.
 
 **Confirm before submitting** unless the invocation already explicitly asked for the review to be posted (e.g., "review this PR and leave comments" makes intent explicit — proceed). If it's ambiguous whether the user wants a published review or just a report back, draft the findings and ask before calling the submit step, the same boundary `settle-draft-pr` draws around its one push.
 
@@ -78,6 +79,6 @@ For each PR carrying findings:
 | Using diff-hunk line numbers | Inline comment lands on the wrong line because it used the hunk's relative offset | Fetch the real file at the head SHA and get the actual line number |
 | Reviewing each PR in total isolation | Missing a vulnerability that only exists because two PRs' changes combine | Treat a stacked/companion PR set as one change set for reachability; cross-link root-cause findings |
 | Posting a false [BLOCKING] | Skipping the adversarial second pass because a finding "looks obviously bad" | Every blocking claim gets challenged before it's published — no exceptions |
-| Selecting APPROVE | Marking a genuinely clean-looking PR as approved | Use COMMENT instead — approval is a human decision this skill doesn't make |
+| Selecting APPROVE | Marking a genuinely clean-looking PR as approved, including from a §6 domain subagent that wasn't told the rule explicitly | Only COMMENT or REQUEST_CHANGES are valid — state this directly in every subagent's prompt, don't assume it's inferred |
 | Publishing without checking intent | Submitting a review the user only wanted as a private report | Confirm before the submit step unless the invocation already asked to post |
 | Leaving temp refs behind | Local `pr-<n>` branches from a fetched-for-review PR still sitting in a shared clone afterward | Delete every temporary branch/ref you created once the review is posted |
