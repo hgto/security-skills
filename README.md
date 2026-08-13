@@ -10,6 +10,7 @@ An OpenCode skill collection for writing security findings, incident reports, an
 - **write-security-incident-report** — Structures a security incident report following NIST SP 800-61 phases and the SANS PICERL framework: ISO 8601 UTC timeline, fact-vs-assessment separation, IOC table with defanged network indicators, MITRE ATT&CK mapping, and blameless lessons learned.
 - **write-security-executive-summary** — Produces a BLUF-first, one-page leadership briefing that translates technical findings into business consequences with quantified risk, sourced claims (annotated references with issuer/identifier/date), and specific recommendations with owners and deadlines.
 - **security-review** — Reviews the current branch diff for concrete High and Medium security vulnerabilities, then independently validates each candidate and discards findings below 8/10 confidence.
+- **security-review-pr** — Reviews one or more live GitHub PRs — across repos when they're stacked/companion PRs for one feature — and publishes the findings as an inline-commented GitHub review, tagged [BLOCKING]/[NIT]/[CAN BE FIXED LATER]. Unlike `security-review`, its entire purpose is to post, not just report.
 - **settle** — Orchestrates the three skills below, in order, to take a branch from finished changes to an open draft PR. Workflow skills rather than report-writing ones; they don't use `security-language` directly (though `settle-security` routes finding language through it).
 - **settle-security** — Autonomously loops focused security reviews — review, assess, apply, re-review — until no actionable findings remain and the agent is satisfied.
 - **settle-comments-and-docs** — Dispatches parallel subagents to tidy comments and docs on the branch's changed files against a keep/cut rubric, without touching logic.
@@ -52,6 +53,14 @@ Review the pending branch changes for concrete vulnerabilities and independently
 > Run the settle-security review loop on this branch.
 
 Loop the security review, apply safe fixes, and re-review until no actionable findings remain and the agent is satisfied.
+
+> /security-review-pr https://github.com/org/repo/pull/123
+
+Fetch that PR's full diff and context, review it for concrete vulnerabilities, and publish the findings as an inline-commented GitHub review starting "Hey It's Claude!"
+
+> Security review these PRs together and post it — they're a stacked feature across two repos.
+
+Treat the named PRs as one combined change set, cross-link any finding that only exists because of how they interact, and publish a separate review on each.
 
 > Tidy the comments and docs on this branch.
 
