@@ -56,7 +56,7 @@ Loop the security review, apply safe fixes, and re-review until no actionable fi
 
 > /security-review-pr https://github.com/org/repo/pull/123
 
-Fetch that PR's full diff and context, review it for concrete vulnerabilities, and publish the findings as an inline-commented GitHub review starting "Hey It's Claude!"
+Fetch that PR's full diff and context, review it for concrete vulnerabilities, and publish the findings as an inline-commented GitHub review opening with a disclaimer that it's automated feedback from Thomas's agent, not an approval
 
 > Security review these PRs together and post it — they're a stacked feature across two repos.
 

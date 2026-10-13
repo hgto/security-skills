@@ -64,7 +64,7 @@ For each PR carrying findings:
 1. Create a pending review (`pull_request_review_write` method `create`, or `gh pr review <n> --repo <owner/repo>` mechanics if MCP tools aren't available).
 2. Add each finding as an inline comment at the exact file and line, using line numbers from the head-SHA file content (§3), not raw diff-hunk positions.
 3. Submit the review. The summary body **must**:
-   - Start with the exact text `Hey It's Claude!`
+   - Start with the exact text `Hey, this is Thomas's agent with automated review feedback! This review is not an approval, and may not be comprehensive. Thomas will post personally separately.`
    - Name the other PRs in this review set (`owner/repo#N`), if any, so a reader on one PR knows to check the others.
    - Open with one or two sentences of genuine, specific observation about what's done well — a review that's only complaints reads as adversarial, not useful. Keep the tone factual, not effusive.
    - List findings grouped by tag (blocking, then nits, then can-fix-later) as short pointers to the inline comments, not restatements of their full text.
