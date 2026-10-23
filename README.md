@@ -11,10 +11,10 @@ An OpenCode skill collection for writing security findings, incident reports, an
 - **write-security-executive-summary** — Produces a BLUF-first, one-page leadership briefing that translates technical findings into business consequences with quantified risk, sourced claims (annotated references with issuer/identifier/date), and specific recommendations with owners and deadlines.
 - **security-review** — Reviews the current branch diff for concrete High and Medium security vulnerabilities, then independently validates each candidate and discards findings below 8/10 confidence.
 - **security-review-pr** — Reviews one or more live GitHub PRs — across repos when they're stacked/companion PRs for one feature — and publishes the findings as an inline-commented GitHub review, tagged [BLOCKING]/[NIT]/[CAN BE FIXED LATER]. Unlike `security-review`, its entire purpose is to post, not just report.
-- **settle** — Orchestrates the three skills below, in order, to take a branch from finished changes to an open draft PR. Workflow skills rather than report-writing ones; they don't use `security-language` directly (though `settle-security` routes finding language through it).
-- **settle-security** — Autonomously loops focused security reviews — review, assess, apply, re-review — until no actionable findings remain and the agent is satisfied.
+- **settle** — Orchestrates the three skills below, in order, to take a branch from finished changes to an open draft PR, running its reviews offline. Workflow skills rather than report-writing ones; they don't use `security-language` directly (though `settle-security` routes finding language through it).
+- **settle-security** — Autonomously and offline loops `code-review` and `security-review` — review, assess, apply, re-review — until no actionable findings remain and the agent is satisfied. Posts nothing to GitHub.
 - **settle-comments-and-docs** — Dispatches parallel subagents to tidy comments and docs on the branch's changed files against a keep/cut rubric, without touching logic.
-- **settle-draft-pr** — Opens the draft PR (using the repo's template or a What/Why/How body), appends the final security review and scanned commit SHA to the PR description, and sends the human a personal Slack DM in `pr-review-request` format.
+- **settle-draft-pr** — Opens the draft PR with a very short description reporting the final code-review and security-review results and scanned commit SHA, then returns a Markdown link to it.
 
 ### How they work together
 
@@ -44,7 +44,7 @@ Translate a technical report or incident into a BLUF-first, one-page leadership 
 
 > Settle this branch.
 
-Run the full pipeline on the current branch: security review to resolution, comment/doc cleanup, then a draft PR with a Slack DM.
+Run the full pipeline on the current branch: offline code and security review to resolution, comment/doc cleanup, then a draft PR returned as a Markdown link.
 
 > Run a security review of this branch.
 
@@ -52,7 +52,7 @@ Review the pending branch changes for concrete vulnerabilities and independently
 
 > Run the settle-security review loop on this branch.
 
-Loop the security review, apply safe fixes, and re-review until no actionable findings remain and the agent is satisfied.
+Loop the code and security reviews offline, apply safe fixes, and re-review until no actionable findings remain and the agent is satisfied.
 
 > /security-review-pr https://github.com/org/repo/pull/123
 
@@ -68,7 +68,7 @@ Tidy comments and docs on the branch's changed files without touching logic.
 
 > Open the settled branch as a draft PR.
 
-Open the draft PR, append the final security review with the scanned commit SHA to its description, and DM the human on Slack.
+Open the draft PR with a short description reporting the review results and scanned commit SHA, and return a Markdown link to it.
 
 ### Note on linter scope
 

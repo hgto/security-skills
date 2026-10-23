@@ -1,15 +1,15 @@
 ---
 name: settle
-description: (hgto/security-skills) Use when asked to settle, finalize, or wrap up a pull request or branch end-to-end before merge — the full pipeline of security review to resolution, comment/doc cleanup, and opening a draft PR with a Slack heads-up. Trigger on "settle this PR", "get this branch ready to merge", or "run the full settle pipeline on this branch". If the user only wants one stage, use settle-security, settle-comments-and-docs, or settle-draft-pr directly.
+description: (hgto/security-skills) Use when asked to settle, finalize, or wrap up a pull request or branch end-to-end before merge — the full pipeline of an offline code and security review loop to resolution, comment/doc cleanup, and opening a draft PR whose short description reports both reviews' results. Trigger on "settle this PR", "get this branch ready to merge", or "run the full settle pipeline on this branch". If the user only wants one stage, use settle-security, settle-comments-and-docs, or settle-draft-pr directly.
 ---
 
 ## 1. Overview
 
 This skill runs three sub-skills, strictly in order, each of which is also independently invocable:
 
-1. **settle-security** — autonomously fixes and re-reviews security findings until no actionable findings remain and the agent is satisfied.
+1. **settle-security** — offline, loops `code-review` and `security-review`, fixing and re-reviewing until neither has actionable findings and the agent is satisfied. Nothing is posted to GitHub.
 2. **settle-comments-and-docs** — tidies comments and docs on the changed files without touching logic.
-3. **settle-draft-pr** — opens the draft PR, records the final security result at the bottom of its description, and sends the human a Slack DM.
+3. **settle-draft-pr** — opens the draft PR with a short description reporting the code-review and security-review results, and returns a Markdown link to it.
 
 The order is load-bearing, not stylistic: security fixes must land before the comment pass touches the same files (otherwise the comment pass reads a diff that's about to change again), and both must land before the PR is opened (a reviewer should see the settled diff, not a work-in-progress one).
 

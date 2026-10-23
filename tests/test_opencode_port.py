@@ -23,7 +23,7 @@ def test_settle_skills_use_opencode_workflow_and_pr_description():
     assert "load and execute `security-review`" in settle_security
     assert "load and execute `security-review`" in settle_draft_pr
     assert "Do not post a PR comment" in settle_security
-    assert "## Security review" in settle_draft_pr
+    assert "## Review" in settle_draft_pr
     assert "Never post the security result as a PR comment or review" in settle_draft_pr
     assert "/security-review" not in settle_security
     assert "/security-review" not in settle_draft_pr
